@@ -4,16 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, ArrowRight, CreditCard } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Link from "next/link"
 
 export function FinancialOverviewCard() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Financial Overview</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
-          View All
-          <ArrowRight className="h-4 w-4 ml-1" />
-        </Button>
+        <Link href="/financial-account">
+          <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+            View All
+            <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent className="space-y-4">
         <Alert className="border-amber-200 bg-amber-50">

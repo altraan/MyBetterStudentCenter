@@ -14,10 +14,13 @@ import {
   Settings,
   TrendingUp,
   User,
+  Users,
   Wallet,
   X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 interface SidebarProps {
   isOpen: boolean
@@ -25,21 +28,24 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { icon: Home, label: "Dashboard", active: true },
-  { icon: User, label: "Profile" },
-  { icon: BookOpen, label: "Academic Records" },
-  { icon: TrendingUp, label: "Academic Progress" },
-  { icon: Calendar, label: "Manage Classes" },
-  { icon: Wallet, label: "Financial Account", badge: "Due" },
-  { icon: CreditCard, label: "Financial Aid & Awards" },
-  { icon: GraduationCap, label: "Credit Transfers" },
-  { icon: FileText, label: "Registration Status" },
-  { icon: ListChecks, label: "Tasks", badge: "2" },
-  { icon: Link2, label: "Important Links" },
-  { icon: HelpCircle, label: "Service Requests" },
+  { icon: Home, label: "Dashboard", href: "/" },
+  { icon: User, label: "Profile", href: "/profile" },
+  { icon: BookOpen, label: "Academic Records", href: "/academic-records" },
+  { icon: TrendingUp, label: "Academic Progress", href: "/academic-progress" },
+  { icon: Calendar, label: "Manage Classes", href: "/manage-classes" },
+  { icon: Wallet, label: "Financial Account", href: "/financial-account", badge: "Due" },
+  { icon: CreditCard, label: "Financial Aid & Awards", href: "/financial-aid" },
+  { icon: GraduationCap, label: "Credit Transfers", href: "/credit-transfers" },
+  { icon: FileText, label: "Registration Status", href: "/registration-status" },
+  { icon: ListChecks, label: "Tasks", href: "/tasks", badge: "2" },
+  { icon: Users, label: "Student Services", href: "/student-services" },
+  { icon: Link2, label: "Important Links", href: "/important-links" },
+  { icon: HelpCircle, label: "Service Requests", href: "/service-requests" },
 ]
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const pathname = usePathname()
+
   return (
     <>
       {/* Mobile overlay */}
@@ -72,33 +78,42 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
           <nav className="flex-1 overflow-y-auto px-3 py-4">
             <ul className="space-y-1">
-              {menuItems.map((item) => (
-                <li key={item.label}>
-                  <button
-                    className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                      item.active
-                        ? "bg-white text-[#0B335E]"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
-                    )}
-                  >
-                    <item.icon className="h-5 w-5 flex-shrink-0" />
-                    <span className="flex-1 text-left">{item.label}</span>
-                    {item.badge && (
-                      <span
-                        className={cn(
-                          "px-2 py-0.5 rounded-full text-xs font-medium",
-                          item.badge === "Due"
-                            ? "bg-red-500 text-white"
-                            : "bg-white/20 text-white"
-                        )}
-                      >
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                </li>
-              ))}
+              {menuItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                        isActive
+                          ? "bg-white text-[#0B335E]"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      )}
+                      onClick={() => {
+                        if (window.innerWidth < 1024) {
+                          onClose()
+                        }
+                      }}
+                    >
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
+                      <span className="flex-1 text-left">{item.label}</span>
+                      {item.badge && (
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded-full text-xs font-medium",
+                            item.badge === "Due"
+                              ? "bg-red-500 text-white"
+                              : "bg-white/20 text-white"
+                          )}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </nav>
 

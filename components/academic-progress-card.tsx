@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 export function AcademicProgressCard() {
   const progress = 51
@@ -12,10 +13,12 @@ export function AcademicProgressCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Academic Progress</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
-          View Details
-          <ArrowRight className="h-4 w-4 ml-1" />
-        </Button>
+        <Link href="/academic-progress">
+          <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+            View Details
+            <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row items-center gap-6">

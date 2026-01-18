@@ -2,16 +2,19 @@
 
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageContext';
-import HackvilleHeader from '@/components/HackvilleHeader';
+import HackvilleLayout from '@/components/HackvilleLayout';
 
 export default function FinancialPage() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <HackvilleHeader />
-      <div className="p-8 max-w-4xl mx-auto pt-24">
-        <h1 className="text-3xl font-bold mb-4 text-blue-900">{t('financeHub')}</h1>
+    <HackvilleLayout>
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-800 border-b-2 border-blue-900 inline-block pb-1">
+            {t('financeHub')}
+          </h1>
+        </header>
         <p className="text-gray-600 mb-8">{t('financeHubDesc')}</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,6 +28,6 @@ export default function FinancialPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </HackvilleLayout>
   );
 }

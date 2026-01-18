@@ -1,24 +1,39 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { User, ChevronDown, LogOut, Settings, CreditCard, Languages, ChevronRight } from "lucide-react";
+import {
+    Menu,
+    User,
+    ChevronDown,
+    LogOut,
+    Languages,
+    Moon,
+    Sun,
+    Settings
+} from "lucide-react";
 import { useLanguage } from "./LanguageContext";
-import { languages } from "@/lib/i18n";
+import { languages, Language } from "@/lib/i18n";
 
 export default function HackvilleHeader() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isUserOpen, setIsUserOpen] = useState(false);
+    const [isBurgerOpen, setIsBurgerOpen] = useState(false);
     const [showLanguages, setShowLanguages] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark as requested earlier
+    const userDropdownRef = useRef<HTMLDivElement>(null);
+    const burgerDropdownRef = useRef<HTMLDivElement>(null);
     const { language, setLanguage, t } = useLanguage();
 
-    const currentLanguageName = languages.find(l => l.code === language)?.name || "English";
+    const currentLanguageName = languages.find((l: any) => l.code === language)?.name || "English";
 
-    // Close dropdown when clicking outside
+    // Close dropdowns when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
+            if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+                setIsUserOpen(false);
                 setShowLanguages(false);
+            }
+            if (burgerDropdownRef.current && !burgerDropdownRef.current.contains(event.target as Node)) {
+                setIsBurgerOpen(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -27,6 +42,16 @@ export default function HackvilleHeader() {
         };
     }, []);
 
+    const toggleBurger = () => {
+        setIsBurgerOpen(!isBurgerOpen);
+        setIsUserOpen(false); // Close other menu
+    };
+
+    const toggleUser = () => {
+        setIsUserOpen(!isUserOpen);
+        setIsBurgerOpen(false); // Close other menu
+    };
+
     const toggleLanguages = (e: React.MouseEvent) => {
         e.stopPropagation();
         setShowLanguages(!showLanguages);
@@ -34,10 +59,8 @@ export default function HackvilleHeader() {
 
     const handleLanguageSelect = (code: any) => {
         setLanguage(code);
-        // Do not close everything immediately to allow user to see the change if they want, 
-        // but the requirement says "when clicked on, it should show available languages"
-        // and usually selecting one should close the picker or at least show it's selected.
         setShowLanguages(false);
+        setIsBurgerOpen(false); // Close menu on select
     };
 
     return (
@@ -47,91 +70,116 @@ export default function HackvilleHeader() {
                 <h1 className="text-xl font-bold text-blue-900">Sheridan</h1>
             </div>
 
-            {/* User Actions */}
-            <div className="relative" ref={dropdownRef}>
-                <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none"
-                >
-                    <div className="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center text-white">
-                        <User size={24} />
-                    </div>
-                    <ChevronDown size={16} className={`text-gray-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-                </button>
+            {/* Actions */}
+            <div className="flex items-center space-x-4 h-full">
+                {/* Burger Menu */}
+                <div className="relative group h-full flex items-center" ref={burgerDropdownRef}>
+                    <button
+                        onClick={toggleBurger}
+                        className={`p-2 rounded-full transition-colors focus:outline-none ${isBurgerOpen ? 'bg-gray-100 text-blue-900' : 'text-gray-600 hover:bg-gray-100'}`}
+                    >
+                        <Menu size={28} />
+                    </button>
 
-                {/* Dropdown Menu */}
-                {isOpen && (
-                    <div className="absolute end-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-100 py-2 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                        <div className="px-4 py-3 border-b border-gray-100 text-start">
-                            <p className="text-sm font-semibold text-gray-900">Alex Student</p>
-                            <p className="text-xs text-gray-500">{t('id')}: 100293847</p>
-                        </div>
-
+                    {/* Burger Dropdown Menu */}
+                    <div
+                        className={`
+                            absolute end-0 top-16 w-64 bg-white rounded-b-lg shadow-xl border-x border-b border-gray-100 py-2 overflow-hidden
+                            transition-all duration-300 origin-top transform
+                            ${isBurgerOpen ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}
+                        `}
+                    >
                         <div className="py-1">
-                            {!showLanguages ? (
-                                <>
-                                    <button onClick={() => console.log('Profile')} className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
-                                        <Settings size={16} className="me-3 text-gray-400" />
-                                        {t('profileSettings') || 'Profile Settings'}
-                                    </button>
-                                    <button onClick={() => console.log('Card')} className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
-                                        <CreditCard size={16} className="me-3 text-gray-400" />
-                                        {t('myCard') || 'My Card'}
-                                    </button>
-                                    
-                                    <div className="border-t border-gray-100 my-1"></div>
-                                    
-                                    <button 
-                                        onClick={toggleLanguages} 
-                                        className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                                    >
-                                        <div className="flex items-center">
-                                            <Languages size={16} className="me-3 text-gray-400" />
-                                            <span>{t('language') || 'Language'}</span>
-                                        </div>
-                                        <div className="flex items-center text-xs text-blue-600 font-medium">
-                                            {currentLanguageName}
-                                            <ChevronRight size={14} className="ms-1 rtl:rotate-180" />
-                                        </div>
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button 
-                                        onClick={() => setShowLanguages(false)} 
-                                        className="w-full flex items-center px-4 py-2 text-sm font-semibold text-blue-900 hover:bg-gray-50 border-b border-gray-100 mb-1"
-                                    >
-                                        <ChevronRight size={16} className="me-2 rotate-180" />
-                                        {t('language') || 'Language'}
-                                    </button>
-                                    <div className="max-h-60 overflow-y-auto py-1">
-                                        {languages.map((lang) => (
+                            {/* Language selection directly in burger menu for convenience */}
+                            <div className="px-4 py-2">
+                                <div className="flex items-center text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                                    <Languages size={14} className="me-2" />
+                                    {t('language')}
+                                </div>
+                                <div className="max-h-64 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+                                    <div className="grid grid-cols-1 gap-1">
+                                        {languages.map((lang: any) => (
                                             <button
                                                 key={lang.code}
                                                 onClick={() => handleLanguageSelect(lang.code)}
-                                                className={`w-full text-start px-4 py-2 text-sm transition-colors flex items-center justify-between ${
-                                                    language === lang.code 
-                                                    ? 'bg-blue-50 text-blue-700 font-medium' 
-                                                    : 'text-gray-700 hover:bg-gray-50'
-                                                }`}
+                                                className={`text-start px-3 py-2 text-sm rounded-md transition-colors ${language === lang.code
+                                                    ? 'bg-blue-600 text-white font-bold shadow-sm'
+                                                    : 'text-gray-600 hover:bg-gray-100'
+                                                    }`}
                                             >
                                                 {lang.name}
-                                                {language === lang.code && <div className="w-2 h-2 rounded-full bg-blue-600"></div>}
                                             </button>
                                         ))}
                                     </div>
-                                </>
-                            )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* User Dropdown */}
+                <div className="relative group h-full flex items-center" ref={userDropdownRef}>
+                    <button
+                        onClick={toggleUser}
+                        className={`flex items-center space-x-2 p-2 rounded-full transition-colors focus:outline-none ${isUserOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
+                    >
+                        <div className="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center text-white border-2 border-white shadow-sm">
+                            <User size={24} />
+                        </div>
+                        <ChevronDown size={16} className={`text-gray-600 transition-transform duration-300 ${isUserOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {/* User Dropdown Menu */}
+                    <div
+                        className={`
+                            absolute end-0 top-16 w-72 rounded-b-lg shadow-2xl border-x border-b py-2 overflow-hidden
+                            transition-all duration-300 origin-top transform
+                            ${isDarkMode
+                                ? 'bg-blue-950 border-blue-900/20'
+                                : 'bg-white border-gray-100'
+                            }
+                            ${isUserOpen ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}
+                        `}
+                    >
+                        <div className={`px-5 py-4 border-b text-start ${isDarkMode ? 'border-blue-900/20 bg-blue-900/20' : 'border-gray-50 bg-gray-50/50'}`}>
+                            <p className={`text-sm font-bold tracking-wide ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('alexStudent')}</p>
+                            <p className={`text-xs mt-1 font-medium ${isDarkMode ? 'text-blue-200/60' : 'text-gray-500'}`}>{t('id')}: 100293847</p>
                         </div>
 
-                        <div className="border-t border-gray-100 py-1">
-                            <button onClick={() => console.log('logout')} className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                <LogOut size={16} className="me-3" />
-                                {t('logout') || 'Logout'}
+                        <div className="py-2 space-y-1">
+                            {/* Theme Toggle Switch */}
+                            <div className="px-5 py-2">
+                                <div className={`flex items-center justify-between p-2 rounded-xl border transition-all ${isDarkMode ? 'bg-blue-900/30 border-blue-800/30' : 'bg-gray-50 border-gray-100'}`}>
+                                    <div className="flex items-center space-x-3">
+                                        <div className={`p-1.5 rounded-lg ${isDarkMode ? 'bg-blue-800/40 text-blue-300' : 'bg-white text-orange-500 shadow-sm'}`}>
+                                            {isDarkMode ? <Moon size={16} /> : <Sun size={16} />}
+                                        </div>
+                                        <span className={`text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
+                                            {isDarkMode ? t('darkMode') : t('lightMode')}
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsDarkMode(!isDarkMode)}
+                                        className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none ${isDarkMode ? 'bg-blue-600' : 'bg-gray-300'}`}
+                                    >
+                                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 transform ${isDarkMode ? 'translate-x-6' : 'translate-x-1'}`} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className={`px-5 py-2 text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-blue-400' : 'text-gray-400'}`}>
+                                {t('accountManagement')}
+                            </div>
+                        </div>
+
+                        <div className={`border-t pt-1 mt-1 ${isDarkMode ? 'border-blue-900/20' : 'border-gray-100'}`}>
+                            <button onClick={() => console.log('logout')} className={`w-full flex items-center px-5 py-3 text-sm transition-all font-semibold group ${isDarkMode ? 'text-red-400 hover:bg-red-400/10' : 'text-red-600 hover:bg-red-50'}`}>
+                                <LogOut size={18} className="me-3 transition-transform group-hover:translate-x-1" />
+                                {t('logout')}
                             </button>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
         </header>
     );
