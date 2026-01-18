@@ -19,7 +19,7 @@ export default function GradesTranscriptsPage() {
                 <p className="text-lg font-medium text-gray-900">{record.term}</p>
                 <p className="text-sm text-gray-500">Official GPA Record</p>
               </div>
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-2xl font-bold text-blue-600">{record.gpa.toFixed(2)}</p>
                 <p className="text-xs uppercase tracking-wider text-gray-400">Term GPA</p>
               </div>

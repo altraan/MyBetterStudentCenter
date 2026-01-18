@@ -17,7 +17,7 @@ export default function FinancialAidPage() {
               <h3 className="text-xl font-bold text-gray-800">{aid.type}</h3>
               <p className="text-gray-500">Status: <span className={`font-semibold ${aid.status === 'Disbursed' ? 'text-green-600' : 'text-yellow-600'}`}>{aid.status}</span></p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <p className="text-2xl font-bold text-gray-900">${aid.award_amount.toFixed(2)}</p>
               <p className="text-xs text-gray-400 uppercase">Award Amount</p>
             </div>

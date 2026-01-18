@@ -12,7 +12,7 @@ export default function TasksHoldsPage() {
       
       <div className="space-y-6">
         {items.map((item) => (
-          <div key={item.task_id} className={`p-6 rounded-lg border-l-8 shadow-sm bg-white ${item.type === 'HOLD' ? 'border-red-500' : 'border-yellow-500'}`}>
+          <div key={item.task_id} className={`p-6 rounded-lg border-s-8 shadow-sm bg-white ${item.type === 'HOLD' ? 'border-red-500' : 'border-yellow-500'}`}>
             <div className="flex justify-between items-start">
               <div>
                 <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded ${item.type === 'HOLD' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
@@ -22,7 +22,7 @@ export default function TasksHoldsPage() {
                 <p className="text-sm text-gray-500">Status: {item.status}</p>
               </div>
               {item.due_date !== 'N/A' && (
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-xs text-gray-400 uppercase">Due Date</p>
                   <p className="font-semibold text-gray-900">{item.due_date}</p>
                 </div>

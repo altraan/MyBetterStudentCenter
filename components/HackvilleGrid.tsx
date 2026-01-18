@@ -13,68 +13,70 @@ import {
   AlertTriangle,
   Users,
 } from "lucide-react";
+import { useLanguage } from "./LanguageContext";
 
 type GridItem = {
-  label: string;
+  labelKey: string; // Changed from label to labelKey
   color: string;
   icon: React.ReactNode;
-  span?: string; // For layout control if needed, though grid-cols-4 usually suffices
 };
 
-const items: GridItem[] = [
-  {
-    label: "Member Info",
-    color: "hover:bg-blue-600",
-    icon: <User size={70} className="text-white" />,
-  },
-  {
-    label: "Academic Records",
-    color: "hover:bg-blue-500",
-    icon: <FileText size={70} className="text-white" />,
-  },
-  {
-    label: "Course Enrolment",
-    color: "hover:bg-cyan-500",
-    icon: <BookOpen size={70} className="text-white" />,
-  },
-  {
-    label: "Manage Classes",
-    color: "hover:bg-orange-600",
-    icon: <Calendar size={70} className="text-white" />,
-  },
-  {
-    label: "Finance",
-    color: "hover:bg-emerald-500",
-    icon: <DollarSign size={70} className="text-white" />,
-  },
-  {
-    label: "Service Requests",
-    color: "hover:bg-yellow-500",
-    icon: <Headphones size={70} className="text-white" />,
-  },
-  {
-    label: "Registration Status",
-    color: "hover:bg-teal-400",
-    icon: <ClipboardCheck size={70} className="text-white" />,
-  },
-  {
-    label: "Credit Transfers",
-    color: "hover:bg-purple-600",
-    icon: <ArrowRightLeft size={70} className="text-white" />,
-  },
-  {
-    label: "Sheridan Alert",
-    color: "hover:bg-red-600",
-    icon: <AlertTriangle size={70} className="text-white" />,
-  },
-  {
-    label: "Student Services",
-    color: "hover:bg-indigo-600",
-    icon: <Users size={70} className="text-white" />,
-  },
-];
-
 export default function HackvilleGrid() {
+  const { t } = useLanguage();
+
+  const items: GridItem[] = [
+    {
+      labelKey: "memberInfo",
+      color: "hover:bg-blue-600",
+      icon: <User size={70} className="text-white" />,
+    },
+    {
+      labelKey: "academicRecords",
+      color: "hover:bg-blue-500",
+      icon: <FileText size={70} className="text-white" />,
+    },
+    {
+      labelKey: "courseEnrollment",
+      color: "hover:bg-cyan-500",
+      icon: <BookOpen size={70} className="text-white" />,
+    },
+    {
+      labelKey: "manageClasses",
+      color: "hover:bg-orange-600",
+      icon: <Calendar size={70} className="text-white" />,
+    },
+    {
+      labelKey: "finance",
+      color: "hover:bg-emerald-500",
+      icon: <DollarSign size={70} className="text-white" />,
+    },
+    {
+      labelKey: "serviceRequests",
+      color: "hover:bg-yellow-500",
+      icon: <Headphones size={70} className="text-white" />,
+    },
+    {
+      labelKey: "registrationStatus",
+      color: "hover:bg-teal-400",
+      icon: <ClipboardCheck size={70} className="text-white" />,
+    },
+    {
+      labelKey: "creditTransfer",
+      color: "hover:bg-purple-600",
+      icon: <ArrowRightLeft size={70} className="text-white" />,
+    },
+    {
+      labelKey: "sheridanAlert",
+      color: "hover:bg-red-600",
+      icon: <AlertTriangle size={70} className="text-white" />,
+    },
+    {
+      labelKey: "studentServices",
+      color: "hover:bg-indigo-600",
+      icon: <Users size={70} className="text-white" />,
+    },
+  ];
+
   return (
     <div className="w-full max-w-5xl mx-auto p-4">
       {/* 
@@ -106,7 +108,7 @@ export default function HackvilleGrid() {
 
               {/* Text Label - Fades out on hover */}
               <span className="text-white font-bold text-xl md:text-2xl transition-opacity duration-300 group-hover:opacity-0 group-hover:delay-0 opacity-100">
-                {item.label}
+                {t(item.labelKey as any)}
               </span>
 
               {/* Icon - Scales/Fades in on hover */}

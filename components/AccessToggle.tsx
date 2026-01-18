@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from './LanguageContext';
 
 interface AccessToggleProps {
   role: 'student' | 'admin';
@@ -8,6 +9,8 @@ interface AccessToggleProps {
 }
 
 export default function AccessToggle({ role, setRole }: AccessToggleProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex bg-gray-200 p-1 rounded-lg mb-8">
       <button
@@ -18,7 +21,7 @@ export default function AccessToggle({ role, setRole }: AccessToggleProps) {
             : 'text-gray-600 hover:text-gray-800'
         }`}
       >
-        Student View
+        {t('studentView')}
       </button>
       <button
         onClick={() => setRole('admin')}
@@ -28,7 +31,7 @@ export default function AccessToggle({ role, setRole }: AccessToggleProps) {
             : 'text-gray-600 hover:text-gray-800'
         }`}
       >
-        Admin View
+        {t('adminView')}
       </button>
     </div>
   );

@@ -10,7 +10,7 @@ export default function AcademicProgressPage() {
     <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-blue-900">Academic Progress</h1>
       
-      <div className="bg-white p-6 rounded-lg shadow-md border-l-8 border-green-500">
+      <div className="bg-white p-6 rounded-lg shadow-md border-s-8 border-green-500">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-xl font-bold text-gray-800">Degree Status</h2>
@@ -27,7 +27,7 @@ export default function AcademicProgressPage() {
         <div className="mt-6 w-full bg-gray-200 rounded-full h-4">
           <div className="bg-green-600 h-4 rounded-full" style={{ width: '85%' }}></div>
         </div>
-        <p className="text-right text-sm text-gray-500 mt-2">85% Complete</p>
+        <p className="text-end text-sm text-gray-500 mt-2">85% Complete</p>
       </div>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">

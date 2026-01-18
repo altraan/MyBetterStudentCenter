@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ChatSidebar from '@/components/ai/ChatSidebar';
 import ChatMessage from '@/components/ai/ChatMessage';
+import { useLanguage } from '@/components/LanguageContext';
 
 interface Message {
   _id: string;
@@ -16,6 +17,7 @@ interface Session {
 }
 
 export default function AIChatPage() {
+  const { t } = useLanguage();
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -55,7 +57,7 @@ export default function AIChatPage() {
       const res = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: 'New Chat' }),
+        body: JSON.stringify({ title: t('newChat') }),
       });
       const newSession = await res.json();
       setActiveSessionId(newSession._id);
@@ -180,7 +182,7 @@ export default function AIChatPage() {
 
         {/* Subheader */}
         <div className="bg-gray-300 text-gray-700 px-4 py-2 text-sm font-medium">
-          Sheridan AI
+          {t('aiChat')}
         </div>
 
         {/* Messages Container */}
@@ -190,7 +192,7 @@ export default function AIChatPage() {
               <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
-              <p>How can I help you today?</p>
+              <p>{t('aiChatHelpPlaceholder')}</p>
             </div>
           )}
           
@@ -206,7 +208,7 @@ export default function AIChatPage() {
           {isLoading && (
             <div className="flex justify-end mb-4">
               <div className="bg-gray-200 p-4 rounded-2xl rounded-br-none animate-pulse">
-                Thinking...
+                {t('aiChatThinking')}
               </div>
             </div>
           )}
@@ -220,13 +222,13 @@ export default function AIChatPage() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="How can I help?"
-              className="w-full bg-gray-100 border-2 border-[#003366] rounded-full py-4 pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder={t('aiChatInputPlaceholder')}
+              className="w-full bg-gray-100 border-2 border-[#003366] rounded-full py-4 ps-6 pe-14 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#003366] hover:text-blue-800 disabled:opacity-50"
+              className="absolute end-4 top-1/2 -translate-y-1/2 text-[#003366] hover:text-blue-800 disabled:opacity-50"
             >
               <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
