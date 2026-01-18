@@ -74,7 +74,14 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Helvetica font for accessibility */
+.font-comic,
+.font-comic * {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }

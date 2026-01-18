@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from 'next/font/google'
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageContext";
+import { ThemeProvider } from "@/components/ThemeContext";
+import TTSButton from "@/components/TTSButton";
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -26,10 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased text-foreground bg-background`}>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            {children}
+            <TTSButton />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+
