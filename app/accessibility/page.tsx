@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HackvilleLayout from "@/components/HackvilleLayout";
 import { useLanguage } from "@/components/LanguageContext";
 import { useTheme } from "@/components/ThemeContext";
 import { useAccessibility } from "@/components/AccessibilityContext";
+import { languages } from "@/lib/i18n";
 import {
     Settings,
     BookOpen,
     Palette,
-    Mic,
     MessageSquare,
     Type,
     List,
@@ -18,7 +18,8 @@ import {
     ChevronUp,
     Check,
     X,
-    MessageCircle
+    MessageCircle,
+    Globe
 } from "lucide-react";
 
 // Toggle Switch Component
@@ -116,13 +117,59 @@ function AccessibilityCard({
     );
 }
 
+// Caption Language Selector Component for Multi-language Captions
+function CaptionLanguageSelector({ isDarkMode }: { isDarkMode: boolean }) {
+    const [selectedLang, setSelectedLang] = useState<string>("");
+
+    useEffect(() => {
+        const saved = localStorage.getItem("captionLanguage");
+        if (saved) setSelectedLang(saved);
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const lang = e.target.value;
+        setSelectedLang(lang);
+        localStorage.setItem("captionLanguage", lang);
+        // Dispatch custom event for same-tab updates
+        window.dispatchEvent(new Event("captionLanguageChanged"));
+    };
+
+    return (
+        <div className={`mb-4 p-4 rounded-lg ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100'}`}>
+            <div className="flex items-center gap-3">
+                <Globe size={20} className={isDarkMode ? 'text-blue-400' : 'text-blue-900'} />
+                <label className={`font-medium ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
+                    Select Caption Language:
+                </label>
+            </div>
+            <select
+                value={selectedLang}
+                onChange={handleChange}
+                className={`
+                    mt-3 w-full p-3 rounded-lg border-2 font-medium
+                    ${isDarkMode
+                        ? 'bg-gray-900 border-gray-700 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'}
+                    focus:outline-none focus:ring-2 focus:ring-blue-500
+                `}
+            >
+                <option value="">-- Choose a language --</option>
+                {languages.filter((l: { code: string; name: string }) => l.code !== 'en').map((lang: { code: string; name: string }) => (
+                    <option key={lang.code} value={lang.code}>
+                        {lang.name}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+}
+
 export default function AccessibilityPage() {
     const { t } = useLanguage();
     const { isDarkMode, fontFamily, setFontFamily } = useTheme();
     const {
         enhanceText, toggleEnhanceText,
         highContrast, toggleHighContrast,
-        textToSpeech, toggleTextToSpeech,
         multiLangCaptions, toggleMultiLangCaptions,
         simpleEnglish, toggleSimpleEnglish,
         stepByStepGuidance, toggleStepByStepGuidance,
@@ -167,15 +214,6 @@ export default function AccessibilityPage() {
                     />
 
                     <AccessibilityCard
-                        title="Text-to-Speech"
-                        description="Text to speech for users who may struggle with vision, autism or ADHD."
-                        icon={Mic}
-                        isOn={textToSpeech}
-                        onToggle={toggleTextToSpeech}
-                        id="text-to-speech"
-                    />
-
-                    <AccessibilityCard
                         title="Dyslexia Friendly Font"
                         description="Transforms the typeface to Helvetica, which is easier to read for some users."
                         icon={Type}
@@ -204,6 +242,11 @@ export default function AccessibilityPage() {
                         onToggle={toggleMultiLangCaptions}
                         id="multi-lang-captions"
                     />
+
+                    {/* Language Selector - shows when multi-lang captions is enabled */}
+                    {multiLangCaptions && (
+                        <CaptionLanguageSelector isDarkMode={isDarkMode} />
+                    )}
 
                     <AccessibilityCard
                         title="Simple English Mode"

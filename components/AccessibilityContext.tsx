@@ -76,6 +76,15 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
         if (reduceVisuals) root.classList.add('reduce-visuals');
         else root.classList.remove('reduce-visuals');
 
+        if (simpleEnglish) root.classList.add('simple-english');
+        else root.classList.remove('simple-english');
+
+        if (stepByStepGuidance) root.classList.add('step-guidance');
+        else root.classList.remove('step-guidance');
+
+        if (multiLangCaptions) root.classList.add('multi-lang-captions');
+        else root.classList.remove('multi-lang-captions');
+
     }, [enhanceText, highContrast, textToSpeech, multiLangCaptions, simpleEnglish, stepByStepGuidance, reduceVisuals]);
 
     const toggle = (setter: React.Dispatch<React.SetStateAction<boolean>>) => () => setter(prev => !prev);

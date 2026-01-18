@@ -4,7 +4,6 @@ import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeProvider } from "@/components/ThemeContext";
 import { AccessibilityProvider } from "@/components/AccessibilityContext";
-import TTSButton from "@/components/TTSButton";
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -30,12 +29,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased text-foreground bg-background`}>
         <ThemeProvider>
-          <LanguageProvider>
-            <AccessibilityProvider>
+          <AccessibilityProvider>
+            <LanguageProvider>
               {children}
-              <TTSButton />
-            </AccessibilityProvider>
-          </LanguageProvider>
+            </LanguageProvider>
+          </AccessibilityProvider>
         </ThemeProvider>
       </body>
     </html>
