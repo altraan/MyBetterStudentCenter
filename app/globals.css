@@ -310,22 +310,22 @@
   }
 
   /* Simple English Mode - improved readability */
-  .simple-english {
+  .concise-english {
     letter-spacing: 0.05em;
     word-spacing: 0.15em;
     line-height: 1.8 !important;
   }
 
   /* Only apply max-width to text content elements, not layout containers */
-  .simple-english p,
-  .simple-english li {
+  .concise-english p,
+  .concise-english li {
     max-width: 70ch;
     font-weight: 400;
   }
 
-  .simple-english h1,
-  .simple-english h2,
-  .simple-english h3 {
+  .concise-english h1,
+  .concise-english h2,
+  .concise-english h3 {
     font-weight: 600;
     letter-spacing: 0.02em;
   }

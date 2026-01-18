@@ -249,7 +249,7 @@ export default function AccessibilityPage() {
                     )}
 
                     <AccessibilityCard
-                        title="Simple English Mode"
+                        title="Concise English Mode"
                         description="For students who prefer simplified sentence structures and common vocabulary to improve comprehension."
                         icon={Type}
                         isOn={simpleEnglish}
