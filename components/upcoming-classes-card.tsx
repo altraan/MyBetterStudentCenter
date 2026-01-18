@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MapPin, Clock } from "lucide-react"
+import { ArrowRight, MapPin, Clock, AlignCenter, AlignCenterVertical } from "lucide-react"
 
 const classes = [
   {
@@ -44,12 +44,14 @@ export function UpcomingClassesCard() {
         {classes.map((cls) => (
           <div
             key={cls.code}
-            className="flex items-start gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+            className="flex items-center gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
           >
             <div className="flex-shrink-0 w-16 text-center">
-              <div className="text-xs font-medium text-[#0B335E]">{cls.code}</div>
-              <div className={`mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium text-white ${cls.statusColor}`}>
-                {cls.status}
+              <div className="text-xs font-medium text-[#0B335E]">
+                {cls.code.split(' ')[0]}
+              </div>
+              <div className="text-xs font-medium text-[#0B335E]">
+                {cls.code.split(' ')[1]}
               </div>
             </div>
             <div className="flex-1 min-w-0">
