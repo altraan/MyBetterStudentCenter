@@ -57,7 +57,7 @@ export const translations = {
     creditTransfer: 'Credit Transfers',
     sheridanAlert: 'Sheridan Alert',
     studentServices: 'Student Services',
-    serviceHub: 'Service Hub',
+    serviceHub: 'Student Hub',
     studentView: 'Student View',
     adminView: 'Admin View',
     id: 'ID',

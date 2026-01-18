@@ -10,11 +10,13 @@ import {
     Moon,
     Sun,
     Globe,
-    Accessibility
+    Accessibility,
+    Headphones
 } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 import { useTheme } from "./ThemeContext";
+import { useAccessibility } from "./AccessibilityContext";
 import { languages } from "@/lib/i18n";
 
 export default function HackvilleHeader() {
@@ -25,6 +27,7 @@ export default function HackvilleHeader() {
     const burgerDropdownRef = useRef<HTMLDivElement>(null);
     const { language, setLanguage, t } = useLanguage();
     const { isDarkMode, toggleDarkMode, fontFamily, setFontFamily, dyslexiaMode, setDyslexiaMode } = useTheme();
+    const { textToSpeech, toggleTextToSpeech } = useAccessibility();
 
     const currentLanguageName = languages.find((l: any) => l.code === language)?.name || "English";
 
@@ -157,6 +160,44 @@ export default function HackvilleHeader() {
                         </div>
 
                         <div className="py-2 space-y-1">
+
+                            {/* Text to Speech Toggle */}
+                            <div className="px-5 py-2">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleTextToSpeech();
+                                    }}
+                                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all hover:bg-opacity-80 ${isDarkMode
+                                            ? (textToSpeech ? 'bg-blue-900/50 border-blue-700' : 'bg-gray-800/50 border-gray-700')
+                                            : (textToSpeech ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-100')
+                                        }`}
+                                >
+                                    <div className="flex items-center space-x-3">
+                                        <div className={`p-1.5 rounded-lg ${isDarkMode
+                                                ? (textToSpeech ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-400')
+                                                : (textToSpeech ? 'bg-blue-100 text-blue-600' : 'bg-white text-gray-500 shadow-sm')
+                                            }`}>
+                                            <Headphones size={16} />
+                                        </div>
+                                        <div className="text-start">
+                                            <span className={`text-xs font-bold uppercase tracking-wider block ${isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                                }`}>
+                                                Text to Speech
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Toggle Switch Visual */}
+                                    <div className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors ${textToSpeech
+                                            ? 'bg-blue-600'
+                                            : (isDarkMode ? 'bg-gray-600' : 'bg-gray-300')
+                                        }`}>
+                                        <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition ${textToSpeech ? 'translate-x-4' : 'translate-x-1'
+                                            }`} />
+                                    </div>
+                                </button>
+                            </div>
 
                             {/* Accessibility Link */}
                             <div className="px-5 py-2">

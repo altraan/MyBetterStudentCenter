@@ -19,7 +19,8 @@ import {
     Check,
     X,
     MessageCircle,
-    Globe
+    Globe,
+    Headphones
 } from "lucide-react";
 
 // Toggle Switch Component
@@ -170,6 +171,7 @@ export default function AccessibilityPage() {
     const {
         enhanceText, toggleEnhanceText,
         highContrast, toggleHighContrast,
+        textToSpeech, toggleTextToSpeech,
         multiLangCaptions, toggleMultiLangCaptions,
         simpleEnglish, toggleSimpleEnglish,
         stepByStepGuidance, toggleStepByStepGuidance,
@@ -241,6 +243,15 @@ export default function AccessibilityPage() {
                         isOn={multiLangCaptions}
                         onToggle={toggleMultiLangCaptions}
                         id="multi-lang-captions"
+                    />
+
+                    <AccessibilityCard
+                        title="Text to Speech (ElevenLabs AI)"
+                        description="Select any text on the screen to have it read aloud using natural-sounding AI voices."
+                        icon={Headphones}
+                        isOn={textToSpeech}
+                        onToggle={toggleTextToSpeech}
+                        id="text-to-speech"
                     />
 
                     {/* Language Selector - shows when multi-lang captions is enabled */}

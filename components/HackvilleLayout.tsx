@@ -24,6 +24,7 @@ import {
     Info
 } from "lucide-react";
 import HackvilleAIChat from "@/components/ai/HackvilleAIChat";
+import TTSButton from "@/components/TTSButton";
 
 interface HackvilleLayoutProps {
     children: React.ReactNode;
@@ -182,6 +183,9 @@ export default function HackvilleLayout({ children }: HackvilleLayoutProps) {
 
             {/* AI Chat Assistant */}
             <HackvilleAIChat />
+
+            {/* Text to Speech Button (Hidden until selection) */}
+            <TTSButton />
         </div>
     );
 }
