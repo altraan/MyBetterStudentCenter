@@ -1,3 +1,4 @@
+import React from "react";
 import { EnrolledClass } from "@/lib/mock-data";
 import { useLanguage } from "@/components/LanguageContext";
 import { useTheme } from "@/components/ThemeContext";
@@ -49,14 +50,14 @@ export default function WeeklySchedule({ enrolledClasses, onClassClick }: Weekly
 
                     {/* Grid Cells (Background) */}
                     {hours.map((time, r) => (
-                        <>
-                            <div key={`time-${r}`} className={`border-b border-r ${isDarkMode ? 'border-gray-700 text-gray-400 bg-gray-900' : 'border-gray-300 text-gray-500 bg-white'} p-2 font-medium sticky left-0 z-10`} style={{ gridRow: r + 2, gridColumn: 1 }}>
+                        <React.Fragment key={`row-${r}`}>
+                            <div className={`border-b border-r ${isDarkMode ? 'border-gray-700 text-gray-400 bg-gray-900' : 'border-gray-300 text-gray-500 bg-white'} p-2 font-medium sticky left-0 z-10`} style={{ gridRow: r + 2, gridColumn: 1 }}>
                                 {time}
                             </div>
                             {Array.from({ length: 5 }).map((_, c) => (
                                 <div key={`cell-${r}-${c}`} className={`border-b border-r ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`} style={{ gridRow: r + 2, gridColumn: c + 2 }}></div>
                             ))}
-                        </>
+                        </React.Fragment>
                     ))}
 
                     {/* Schedule Items (Overlay) */}

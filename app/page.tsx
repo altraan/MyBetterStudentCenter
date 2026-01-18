@@ -2,13 +2,47 @@
 
 import { useLanguage } from "@/components/LanguageContext";
 import { useTheme } from "@/components/ThemeContext";
+import { useAccessibility } from "@/components/AccessibilityContext";
 import HackvilleLayout from "@/components/HackvilleLayout";
 import PrivacyToggle from "@/components/PrivacyToggle";
 import { mockUser, mockAcademicProgress, mockTodaysClasses, mockFinancialSummary, mockDashboardStats } from "@/lib/mock-data";
+import { translations } from "@/lib/i18n";
 import {
     Calendar,
     ExternalLink
 } from "lucide-react";
+
+// Helper component for multi-language captions on key text
+function CaptionedText({
+    children,
+    translationKey
+}: {
+    children: React.ReactNode;
+    translationKey: string;
+}) {
+    const { multiLangCaptions } = useAccessibility();
+    const { language } = useLanguage();
+
+    // Don't show caption if disabled or if already viewing in English or the language is English
+    if (!multiLangCaptions || language === 'en') {
+        return <>{children}</>;
+    }
+
+    // Get the translation in the current language
+    const langTranslations = translations[language] as Record<string, string>;
+    const translatedText = langTranslations[translationKey];
+
+    return (
+        <span className="inline-block">
+            {children}
+            {translatedText && translatedText !== children && (
+                <span className="block text-sm opacity-70 italic font-normal">
+                    {translatedText}
+                </span>
+            )}
+        </span>
+    );
+}
 
 export default function StudentPortal() {
     const { t } = useLanguage();
@@ -19,7 +53,7 @@ export default function StudentPortal() {
             <div className="max-w-7xl mx-auto">
                 <header className="mb-8">
                     <h1 className={`text-2xl font-bold border-b-2 border-blue-900 inline-block pb-1 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-                        {t('serviceHub')}
+                        <CaptionedText translationKey="serviceHub">{t('serviceHub')}</CaptionedText>
                     </h1>
                 </header>
 

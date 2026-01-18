@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Volume2, X, Loader2 } from "lucide-react";
-import { useTheme } from "./ThemeContext";
+import { useAccessibility } from "./AccessibilityContext";
 
 export default function TTSButton() {
-    const { dyslexiaMode } = useTheme();
+    const { textToSpeech } = useAccessibility();
     const [selectedText, setSelectedText] = useState("");
     const [buttonPosition, setButtonPosition] = useState<{ x: number; y: number } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,7 @@ export default function TTSButton() {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const handleSelection = useCallback(() => {
-        if (!dyslexiaMode) return;
+        if (!textToSpeech) return;
 
         const selection = window.getSelection();
         const text = selection?.toString().trim();
@@ -34,10 +34,10 @@ export default function TTSButton() {
             setSelectedText("");
             setButtonPosition(null);
         }
-    }, [dyslexiaMode]);
+    }, [textToSpeech]);
 
     useEffect(() => {
-        if (!dyslexiaMode) {
+        if (!textToSpeech) {
             setSelectedText("");
             setButtonPosition(null);
             return;
@@ -50,7 +50,7 @@ export default function TTSButton() {
             document.removeEventListener("mouseup", handleSelection);
             document.removeEventListener("keyup", handleSelection);
         };
-    }, [dyslexiaMode, handleSelection]);
+    }, [textToSpeech, handleSelection]);
 
     const speakText = async () => {
         if (!selectedText || isLoading) return;
@@ -115,7 +115,7 @@ export default function TTSButton() {
         stopAudio();
     };
 
-    if (!dyslexiaMode || !buttonPosition || !selectedText) {
+    if (!textToSpeech || !buttonPosition || !selectedText) {
         return null;
     }
 

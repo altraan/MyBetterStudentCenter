@@ -37,6 +37,7 @@
     --chart-3: 37.7 92.1% 50.2%;
     --chart-4: 188.7 94.5% 42.7%;
     --chart-5: 258.3 89.5% 66.3%;
+    --chart-6: 258.3 89.5% 66.3%;
   }
 
   .dark {
@@ -84,4 +85,291 @@
 .font-comic,
 .font-comic * {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+@layer utilities {
+  .enhance-text {
+    font-size: 1.125rem;
+    /* 18px base */
+    line-height: 1.75;
+  }
+
+  .enhance-text h1 {
+    font-size: 2.5rem !important;
+  }
+
+  .enhance-text h2 {
+    font-size: 2rem !important;
+  }
+
+  .enhance-text h3 {
+    font-size: 1.75rem !important;
+  }
+
+  .enhance-text p,
+  .enhance-text span,
+  .enhance-text div {
+    font-size: 110%;
+  }
+
+  /* HIGH CONTRAST MODE */
+  /* Black background, white text, white cards with visible black text */
+
+  html.high-contrast {
+    background: #000 !important;
+  }
+
+  .high-contrast body,
+  .high-contrast .min-h-screen {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  .high-contrast header {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  /* Sidebar Navigation in High Contrast */
+  .high-contrast aside {
+    background: #000 !important;
+    color: #fff !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* ALL sidebar items: White Background, Black Text (Button/Card Style) */
+  .high-contrast aside a {
+    background-color: #fff !important;
+    color: #000 !important;
+    margin-bottom: 0.5rem !important;
+    border-radius: 8px !important;
+    border: 2px solid #fff !important;
+  }
+
+  /* Force text and icons to be black */
+  .high-contrast aside a span,
+  .high-contrast aside a svg {
+    color: #000 !important;
+    stroke: #000 !important;
+  }
+
+  /* Hover State: Light gray */
+  .high-contrast aside a:hover {
+    background-color: #e5e5e5 !important;
+    border-color: #000 !important;
+  }
+
+  /* Active Sidebar Item: Distinguish with thickness or style */
+  .high-contrast aside a[class*="bg-white"],
+  .high-contrast aside a[class*="bg-gray-800"],
+  .high-contrast aside a[class*="border-blue-"],
+  .high-contrast aside .bg-white,
+  .high-contrast aside .text-blue-900 {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 4px solid #000 !important;
+    /* Visual indicator for active item */
+    font-weight: 800 !important;
+  }
+
+  /* Icons inside active item */
+  .high-contrast aside a[class*="bg-white"] svg,
+  .high-contrast aside a[class*="bg-gray-800"] svg,
+  .high-contrast aside a[class*="border-blue-"] svg {
+    color: #000 !important;
+    stroke: #000 !important;
+  }
+
+  .high-contrast main {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  /* ALL TEXT on dark background should be white */
+  .high-contrast main p,
+  .high-contrast main span,
+  .high-contrast main div,
+  .high-contrast main label,
+  .high-contrast main td,
+  .high-contrast main th,
+  .high-contrast main li {
+    color: #fff !important;
+  }
+
+  /* Section titles and headings - white */
+  .high-contrast h1,
+  .high-contrast h2,
+  .high-contrast h3,
+  .high-contrast h4,
+  .high-contrast h5,
+  .high-contrast h6 {
+    color: #fff !important;
+  }
+
+  /* Cards/containers with backgrounds - white bg, black text */
+  .high-contrast .rounded-lg,
+  .high-contrast .rounded-xl,
+  .high-contrast .rounded-md,
+  .high-contrast [class*="bg-white"],
+  .high-contrast [class*="bg-gray-"] {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Text INSIDE cards should be black */
+  .high-contrast .rounded-lg *,
+  .high-contrast .rounded-xl *,
+  .high-contrast .rounded-md *,
+  .high-contrast [class*="bg-white"] *,
+  .high-contrast [class*="bg-gray-"] * {
+    color: #000 !important;
+  }
+
+  /* Links inside cards - make them blue and visible */
+  .high-contrast .rounded-lg a,
+  .high-contrast .rounded-xl a {
+    color: #1e3a8a !important;
+    text-decoration: underline !important;
+  }
+
+  /* Tables */
+  .high-contrast table {
+    background: #fff !important;
+  }
+
+  .high-contrast table th,
+  .high-contrast table td {
+    color: #000 !important;
+    border-color: #000 !important;
+  }
+
+  /* Buttons */
+  .high-contrast button:not([role="switch"]) {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+  }
+
+  /* Toggle switches */
+  .high-contrast button[role="switch"] {
+    background: #333 !important;
+  }
+
+  .high-contrast button[role="switch"][aria-checked="true"] {
+    background: #fff !important;
+  }
+
+  .high-contrast button[role="switch"] span {
+    background: #fff !important;
+  }
+
+  .high-contrast button[role="switch"][aria-checked="true"] span {
+    background: #000 !important;
+  }
+
+  /* Form inputs */
+  .high-contrast input,
+  .high-contrast select,
+  .high-contrast textarea {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+  }
+
+  .high-contrast hr {
+    border-color: #333 !important;
+  }
+
+  /* Icons - inherit from parent */
+  .high-contrast svg {
+    color: currentColor !important;
+    stroke: currentColor !important;
+  }
+
+  /* Reduce Visuals Mode - hide decorative elements */
+  /* Hide all icons except essential ones (dark mode, language, user) */
+  .reduce-visuals svg.lucide {
+    display: none !important;
+  }
+
+  /* Keep essential header icons visible */
+  .reduce-visuals [data-keep-icon] svg.lucide,
+  .reduce-visuals .keep-icon svg.lucide {
+    display: inline-block !important;
+  }
+
+  .reduce-visuals img,
+  .reduce-visuals video {
+    display: none !important;
+  }
+
+  .reduce-visuals * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Simple English Mode - improved readability */
+  .concise-english {
+    letter-spacing: 0.05em;
+    word-spacing: 0.15em;
+    line-height: 1.8 !important;
+  }
+
+  /* Only apply max-width to text content elements, not layout containers */
+  .concise-english p,
+  .concise-english li {
+    max-width: 70ch;
+    font-weight: 400;
+  }
+
+  .concise-english h1,
+  .concise-english h2,
+  .concise-english h3 {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* Step-by-Step Guidance - visual cues for interactive elements */
+  .step-guidance button,
+  .step-guidance a,
+  .step-guidance [role="button"] {
+    outline: 2px dashed rgba(59, 130, 246, 0.5);
+    outline-offset: 2px;
+    position: relative;
+  }
+
+  .step-guidance button:hover,
+  .step-guidance a:hover,
+  .step-guidance [role="button"]:hover {
+    outline: 3px solid rgba(59, 130, 246, 0.8);
+    outline-offset: 3px;
+  }
+
+  .step-guidance input,
+  .step-guidance select,
+  .step-guidance textarea {
+    outline: 2px dashed rgba(34, 197, 94, 0.5);
+    outline-offset: 2px;
+  }
+
+  .step-guidance input:focus,
+  .step-guidance select:focus,
+  .step-guidance textarea:focus {
+    outline: 3px solid rgba(34, 197, 94, 0.8);
+    outline-offset: 3px;
+  }
+
+  /* Multi-language captions indicator styling */
+  .multi-lang-caption {
+    display: none;
+    font-size: 0.85em;
+    opacity: 0.75;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .multi-lang-captions .multi-lang-caption {
+    display: block;
+  }
 }

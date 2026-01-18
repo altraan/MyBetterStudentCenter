@@ -11,6 +11,15 @@ import { ChevronRight, Clock, MapPin, RefreshCw, Trash2, Check, AlertTriangle } 
 import Link from "next/link";
 
 // Swap Modal Component
+type SwapStatus = 'open' | 'full' | 'conflict';
+
+interface SwapAlternative extends EnrolledClass {
+  status: SwapStatus;
+  statusMessage?: string;
+  seatsAvailable?: number;
+  totalSeats?: number;
+}
+
 function SwapModal({
   course,
   alternatives,
@@ -19,11 +28,34 @@ function SwapModal({
   isDarkMode
 }: {
   course: EnrolledClass;
-  alternatives: EnrolledClass[];
+  alternatives: SwapAlternative[];
   onSelect: (newSection: EnrolledClass) => void;
   onCancel: () => void;
   isDarkMode: boolean;
 }) {
+  const getStatusBadge = (alt: SwapAlternative) => {
+    switch (alt.status) {
+      case 'open':
+        return (
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-700'}`}>
+            Open ({alt.seatsAvailable} seats)
+          </span>
+        );
+      case 'full':
+        return (
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-red-900/50 text-red-400' : 'bg-red-100 text-red-700'}`}>
+            Full (Waitlist)
+          </span>
+        );
+      case 'conflict':
+        return (
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-orange-900/50 text-orange-400' : 'bg-orange-100 text-orange-700'}`}>
+            Time Conflict
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
@@ -36,37 +68,45 @@ function SwapModal({
         </p>
 
         <div className="space-y-3 mb-6">
-          {alternatives.map((alt) => (
-            <div
-              key={alt.id}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${isDarkMode
-                ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 hover:border-blue-500'
-                : 'bg-white border-gray-200 hover:border-blue-500 hover:shadow-md'
-                }`}
-              onClick={() => onSelect(alt)}
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Section {alt.id.split('-')[2]}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-700'}`}>
-                      Open
-                    </span>
+          {alternatives.map((alt) => {
+            const isDisabled = alt.status !== 'open';
+            return (
+              <div
+                key={alt.id}
+                className={`p-4 rounded-xl border transition-all relative ${isDisabled
+                    ? (isDarkMode ? 'bg-gray-800 border-gray-700 opacity-60 cursor-not-allowed' : 'bg-gray-50 border-gray-200 opacity-60 cursor-not-allowed')
+                    : (isDarkMode ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 hover:border-blue-500 cursor-pointer' : 'bg-white border-gray-200 hover:border-blue-500 hover:shadow-md cursor-pointer')
+                  }`}
+                onClick={() => !isDisabled && onSelect(alt)}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Section {alt.id.split('-').pop()?.replace('alt', '') || '002'}</span>
+                      {getStatusBadge(alt)}
+                    </div>
+                    <div className={`text-sm flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      <span className="flex items-center gap-1"><Clock size={14} /> {alt.schedule.days.map(d => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][d]).join(', ')} {alt.startTime} - {alt.endTime}</span>
+                      <span className="flex items-center gap-1"><MapPin size={14} /> {alt.room}</span>
+                    </div>
+                    <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {alt.professor}
+                    </div>
+                    {alt.status === 'conflict' && (
+                      <div className={`text-xs mt-1 font-medium ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>
+                        Conflicts with current schedule
+                      </div>
+                    )}
                   </div>
-                  <div className={`text-sm flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    <span className="flex items-center gap-1"><Clock size={14} /> {alt.schedule.days.map(d => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][d]).join(', ')} {alt.startTime} - {alt.endTime}</span>
-                    <span className="flex items-center gap-1"><MapPin size={14} /> {alt.room}</span>
-                  </div>
-                  <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {alt.professor}
-                  </div>
-                </div>
-                <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
-                  <RefreshCw size={18} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
+                  {!isDisabled && (
+                    <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
+                      <RefreshCw size={18} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <button
@@ -157,7 +197,7 @@ export default function ManageClassesPage() {
   // Swap State
   const [swapData, setSwapData] = useState<{
     original: EnrolledClass;
-    alternatives: EnrolledClass[];
+    alternatives: SwapAlternative[];
   } | null>(null);
 
   // Modals
@@ -226,8 +266,9 @@ export default function ManageClassesPage() {
   const handleSwapClass = (cls: EnrolledClass) => {
     setSelectedEnrolledClass(null); // Close details modal if open
 
-    // Generate Mock Alternatives
-    const mockAlternatives: EnrolledClass[] = [
+    // Generate Mock Alternatives with specific scenarios
+    const mockAlternatives: SwapAlternative[] = [
+      // Scenario 1: Open/Available
       {
         ...cls,
         id: cls.id + "-alt1",
@@ -235,8 +276,12 @@ export default function ManageClassesPage() {
         endTime: "5:00 PM",
         room: cls.room.replace(/\d+/, "101"),
         professor: "Prof. New Guy",
-        schedule: { ...cls.schedule, startHour: 14, endHour: 17, days: [1, 3] } // Tue, Thu
+        schedule: { ...cls.schedule, startHour: 14, endHour: 17, days: [1, 3] }, // Tue, Thu
+        status: 'open',
+        seatsAvailable: 5,
+        totalSeats: 30
       },
+      // Scenario 2: Full/Closed
       {
         ...cls,
         id: cls.id + "-alt2",
@@ -244,7 +289,24 @@ export default function ManageClassesPage() {
         endTime: "11:00 AM",
         room: cls.room.replace(/\d+/, "305"),
         professor: "Prof. Morning Person",
-        schedule: { ...cls.schedule, startHour: 8, endHour: 11, days: [4] } // Fri
+        schedule: { ...cls.schedule, startHour: 8, endHour: 11, days: [4] }, // Fri
+        status: 'full',
+        seatsAvailable: 0,
+        totalSeats: 30
+      },
+      // Scenario 3: Time Conflict (overlapping with existing class)
+      {
+        ...cls,
+        id: cls.id + "-alt3",
+        startTime: "9:00 AM",
+        endTime: "12:00 PM",
+        room: cls.room.replace(/\d+/, "404"),
+        professor: "Prof. Conflict",
+        schedule: { ...cls.schedule, startHour: 9, endHour: 12, days: [0] }, // Mon 9-12
+        status: 'conflict',
+        statusMessage: 'Conflicts with Capstone Project',
+        seatsAvailable: 12,
+        totalSeats: 30
       }
     ];
 
@@ -351,51 +413,6 @@ export default function ManageClassesPage() {
                 )}
               </div>
             </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link href="#" className="block group">
-                <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                  ? 'bg-gray-800 border border-gray-700 hover:border-blue-500'
-                  : 'bg-gray-100 hover:bg-gray-200'
-                  }`}>
-                  <div>
-                    <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
-                      Swap Classes
-                    </span>
-                    <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Change section times
-                    </p>
-                  </div>
-                  <ChevronRight className={`group-hover:translate-x-1 transition-transform ${isDarkMode ? 'text-gray-500' : 'text-blue-900'}`} size={24} />
-                </div>
-              </Link>
-
-              <Link href="#" className="block group">
-                <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                  ? 'bg-gray-800 border border-gray-700 hover:border-red-500'
-                  : 'bg-gray-100 hover:bg-gray-200'
-                  }`}>
-                  <div>
-                    <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
-                      Drop Classes
-                    </span>
-                    <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Remove from schedule
-                    </p>
-                  </div>
-                  <ChevronRight className={`group-hover:translate-x-1 transition-transform ${isDarkMode ? 'text-gray-500' : 'text-blue-900'}`} size={24} />
-                </div>
-              </Link>
-            </div>
-
-            {/* Weekly Schedule */}
-            <WeeklySchedule
-              enrolledClasses={enrolledClasses}
-              onClassClick={setSelectedEnrolledClass}
-              onSwapClass={handleSwapClass}
-              onDropClass={handleDropClass}
-            />
           </div>
 
           {/* Right Column - Course Browser */}
@@ -407,6 +424,14 @@ export default function ManageClassesPage() {
             />
           </div>
         </div>
+
+        {/* Weekly Schedule */}
+        <WeeklySchedule
+          enrolledClasses={enrolledClasses}
+          onClassClick={setSelectedEnrolledClass}
+          onSwapClass={handleSwapClass}
+          onDropClass={handleDropClass}
+        />
 
         {/* Selected Class Details Modal */}
         {selectedEnrolledClass && (
