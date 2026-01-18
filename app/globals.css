@@ -208,11 +208,12 @@
   }
 
   /* Cards/containers with backgrounds - white bg, black text */
+  /* Exclude min-h-screen to avoid targeting the main layout wrapper */
   .high-contrast .rounded-lg,
   .high-contrast .rounded-xl,
   .high-contrast .rounded-md,
   .high-contrast [class*="bg-white"],
-  .high-contrast [class*="bg-gray-"] {
+  .high-contrast [class*="bg-gray-"]:not(.min-h-screen) {
     background: #fff !important;
     color: #000 !important;
   }
@@ -222,7 +223,7 @@
   .high-contrast .rounded-xl *,
   .high-contrast .rounded-md *,
   .high-contrast [class*="bg-white"] *,
-  .high-contrast [class*="bg-gray-"] * {
+  .high-contrast [class*="bg-gray-"]:not(.min-h-screen) * {
     color: #000 !important;
   }
 

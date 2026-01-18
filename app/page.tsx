@@ -47,6 +47,7 @@ function CaptionedText({
 export default function StudentPortal() {
     const { t } = useLanguage();
     const { isDarkMode } = useTheme();
+    const { highContrast } = useAccessibility();
 
     return (
         <HackvilleLayout>
@@ -108,15 +109,24 @@ export default function StudentPortal() {
                         <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>{t('academicProgress')}</h3>
                         <div className="flex flex-col md:flex-row items-center justify-around h-full pb-8">
                             {/* Circular Progress */}
+                            {/* Circular Progress */}
                             <div className="relative w-48 h-48">
                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                     <circle
-                                        className={`stroke-current ${isDarkMode ? 'text-gray-700' : 'text-gray-100'}`}
+                                        className={`stroke-current ${highContrast
+                                                ? ''
+                                                : (isDarkMode ? 'text-gray-700' : 'text-gray-100')
+                                            }`}
+                                        stroke={highContrast ? '#9CA3AF' : 'currentColor'}
                                         strokeWidth="10"
                                         cx="50" cy="50" r="40" fill="transparent"
                                     ></circle>
                                     <circle
-                                        className={`stroke-current ${isDarkMode ? 'text-blue-500' : 'text-blue-900'}`}
+                                        className={`stroke-current ${highContrast
+                                                ? ''
+                                                : (isDarkMode ? 'text-blue-500' : 'text-blue-900')
+                                            }`}
+                                        stroke={highContrast ? '#000000' : 'currentColor'}
                                         strokeWidth="10"
                                         strokeLinecap="round"
                                         cx="50" cy="50" r="40" fill="transparent"
@@ -126,18 +136,32 @@ export default function StudentPortal() {
                                     ></circle>
                                 </svg>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>{mockAcademicProgress.completionPercentage}%</span>
-                                    <span className={`text-xs uppercase font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t('percentComplete')}</span>
+                                    <span className={`text-4xl font-bold ${highContrast ? 'text-black' : (isDarkMode ? 'text-white' : 'text-blue-900')
+                                        }`}>{mockAcademicProgress.completionPercentage}%</span>
+                                    <span className={`text-xs uppercase font-semibold ${highContrast ? 'text-black' : (isDarkMode ? 'text-gray-400' : 'text-gray-500')
+                                        }`}>{t('percentComplete')}</span>
                                 </div>
                             </div>
                             <div className="space-y-2 mt-4 md:mt-0">
                                 <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-300' : ''}`}>
-                                    <div className={`w-3 h-3 rounded-full me-2 ${isDarkMode ? 'bg-blue-500' : 'bg-blue-900'}`}></div>
-                                    <span>{t('completedCredits')}: {mockAcademicProgress.completedCredits} {t('credits')}</span>
+                                    <div
+                                        className={`w-3 h-3 rounded-full me-2 ${highContrast
+                                                ? ''
+                                                : (isDarkMode ? 'bg-blue-500' : 'bg-blue-900')
+                                            }`}
+                                        style={highContrast ? { backgroundColor: '#000000' } : undefined}
+                                    ></div>
+                                    <span className={highContrast ? 'font-bold text-black' : ''}>{t('completedCredits')}: {mockAcademicProgress.completedCredits} {t('credits')}</span>
                                 </div>
                                 <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-300' : ''}`}>
-                                    <div className={`w-3 h-3 rounded-full me-2 ${isDarkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
-                                    <span>{t('remainingCredits')}: {(mockAcademicProgress.totalCredits - mockAcademicProgress.completedCredits).toFixed(1)} {t('credits')}</span>
+                                    <div
+                                        className={`w-3 h-3 rounded-full me-2 ${highContrast
+                                                ? ''
+                                                : (isDarkMode ? 'bg-gray-600' : 'bg-gray-200')
+                                            }`}
+                                        style={highContrast ? { backgroundColor: '#9CA3AF' } : undefined}
+                                    ></div>
+                                    <span className={highContrast ? 'font-medium text-black' : ''}>{t('remainingCredits')}: {(mockAcademicProgress.totalCredits - mockAcademicProgress.completedCredits).toFixed(1)} {t('credits')}</span>
                                 </div>
                             </div>
                         </div>
