@@ -98,7 +98,7 @@ export default function AIChatPage() {
         body: JSON.stringify({ content: userMsgContent }),
       });
       const data = await res.json();
-      
+
       // Replace optimistic message and add AI response
       setMessages(prev => {
         const filtered = prev.filter(m => m._id !== 'temp-u');
@@ -168,15 +168,24 @@ export default function AIChatPage() {
         {/* Header (Sheridan themed) */}
         <header className="bg-[#003366] text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <h1 className="text-xl font-bold">Sheridan</h1>
+            <button className="hover:bg-blue-800 p-1 rounded transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
+            {/* PNG Logo Replacement */}
+            <img
+              src="/images/sheridan-logo.png"
+              alt="Sheridan Logo"
+              className="h-8 w-auto brightness-0 invert"
+            />
           </div>
-          <div className="bg-white rounded-full p-1">
-             <svg className="w-6 h-6 text-[#003366]" fill="currentColor" viewBox="0 0 20 20">
-               <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-             </svg>
+
+          <div className="bg-white rounded-full p-1 cursor-pointer hover:bg-gray-100 transition-colors">
+            <svg className="w-6 h-6 text-[#003366]" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+            </svg>
           </div>
         </header>
 
@@ -195,7 +204,7 @@ export default function AIChatPage() {
               <p>{t('aiChatHelpPlaceholder')}</p>
             </div>
           )}
-          
+
           {messages.map((msg) => (
             <ChatMessage
               key={msg._id}
@@ -204,7 +213,7 @@ export default function AIChatPage() {
               onDelete={handleDeleteMessage}
             />
           ))}
-          
+
           {isLoading && (
             <div className="flex justify-end mb-4">
               <div className="bg-gray-200 p-4 rounded-2xl rounded-br-none animate-pulse">
@@ -238,6 +247,6 @@ export default function AIChatPage() {
           </form>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
