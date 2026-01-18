@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import PhoneMockup from "@/components/PhoneMockup";
 
 export const metadata: Metadata = {
   title: "myStudentCenter",
   description: "Better Student Information System",
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -13,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PhoneMockup>{children}</PhoneMockup>
+      </body>
     </html>
   );
 }
