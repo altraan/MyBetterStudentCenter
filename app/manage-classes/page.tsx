@@ -10,6 +10,76 @@ import { mockEnrolledClasses, mockAvailableCourses, Course, EnrolledClass } from
 import { ChevronRight, Clock, MapPin, RefreshCw, Trash2, Check, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 
+// Swap Modal Component
+function SwapModal({
+  course,
+  alternatives,
+  onSelect,
+  onCancel,
+  isDarkMode
+}: {
+  course: EnrolledClass;
+  alternatives: EnrolledClass[];
+  onSelect: (newSection: EnrolledClass) => void;
+  onCancel: () => void;
+  isDarkMode: boolean;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
+      <div className={`relative w-full max-w-lg rounded-2xl shadow-2xl p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+        <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
+          Swap Section for {course.code}
+        </h3>
+        <p className={`mb-4 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Select an alternative section below to swap.
+        </p>
+
+        <div className="space-y-3 mb-6">
+          {alternatives.map((alt) => (
+            <div
+              key={alt.id}
+              className={`p-4 rounded-xl border cursor-pointer transition-all ${isDarkMode
+                ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 hover:border-blue-500'
+                : 'bg-white border-gray-200 hover:border-blue-500 hover:shadow-md'
+                }`}
+              onClick={() => onSelect(alt)}
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Section {alt.id.split('-')[2]}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-700'}`}>
+                      Open
+                    </span>
+                  </div>
+                  <div className={`text-sm flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <span className="flex items-center gap-1"><Clock size={14} /> {alt.schedule.days.map(d => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][d]).join(', ')} {alt.startTime} - {alt.endTime}</span>
+                    <span className="flex items-center gap-1"><MapPin size={14} /> {alt.room}</span>
+                  </div>
+                  <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {alt.professor}
+                  </div>
+                </div>
+                <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
+                  <RefreshCw size={18} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={onCancel}
+          className={`w-full py-3 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Confirmation Modal Component
 function ConfirmModal({
   title,
@@ -52,8 +122,8 @@ function ConfirmModal({
           <button
             onClick={onConfirm}
             className={`flex-1 py-2.5 rounded-xl font-medium transition-colors ${confirmVariant === 'danger'
-                ? 'bg-red-600 text-white hover:bg-red-500'
-                : 'bg-blue-600 text-white hover:bg-blue-500'
+              ? 'bg-red-600 text-white hover:bg-red-500'
+              : 'bg-blue-600 text-white hover:bg-blue-500'
               }`}
           >
             {confirmText}
@@ -81,7 +151,14 @@ export default function ManageClassesPage() {
   const { t } = useLanguage();
   const { isDarkMode } = useTheme();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedEnrolledClass, setSelectedEnrolledClass] = useState<EnrolledClass | null>(null);
   const [enrolledClasses, setEnrolledClasses] = useState<EnrolledClass[]>(mockEnrolledClasses);
+
+  // Swap State
+  const [swapData, setSwapData] = useState<{
+    original: EnrolledClass;
+    alternatives: EnrolledClass[];
+  } | null>(null);
 
   // Modals
   const [confirmModal, setConfirmModal] = useState<{
@@ -102,6 +179,12 @@ export default function ManageClassesPage() {
 
   // Add Course Handler
   const handleAddCourse = (course: Course) => {
+    // Check if already enrolled
+    if (enrolledClasses.some(c => c.code === course.code)) {
+      showToast(`Already enrolled in ${course.code}`);
+      return;
+    }
+
     const newEnrolled: EnrolledClass = {
       id: `enrolled-${Date.now()}`,
       code: course.code,
@@ -117,13 +200,14 @@ export default function ManageClassesPage() {
       },
     };
 
-    setEnrolledClasses([...enrolledClasses, newEnrolled]);
+    setEnrolledClasses(prev => [...prev, newEnrolled]);
     setSelectedCourse(null);
     showToast(`Added ${course.code} - ${course.name}`);
   };
 
   // Drop Course Handler
   const handleDropClass = (cls: EnrolledClass) => {
+    setSelectedEnrolledClass(null); // Close details modal if open
     setConfirmModal({
       show: true,
       title: 'Drop Course',
@@ -131,7 +215,7 @@ export default function ManageClassesPage() {
       confirmText: 'Drop Course',
       variant: 'danger',
       onConfirm: () => {
-        setEnrolledClasses(enrolledClasses.filter(c => c.id !== cls.id));
+        setEnrolledClasses(prev => prev.filter(c => c.id !== cls.id));
         setConfirmModal(null);
         showToast(`Dropped ${cls.code}`);
       },
@@ -140,17 +224,42 @@ export default function ManageClassesPage() {
 
   // Swap Course Handler
   const handleSwapClass = (cls: EnrolledClass) => {
-    setConfirmModal({
-      show: true,
-      title: 'Swap Section',
-      message: `Looking for alternative sections for ${cls.code}...`,
-      confirmText: 'Find Sections',
-      variant: 'primary',
-      onConfirm: () => {
-        setConfirmModal(null);
-        showToast(`Searching for sections of ${cls.code}...`);
+    setSelectedEnrolledClass(null); // Close details modal if open
+
+    // Generate Mock Alternatives
+    const mockAlternatives: EnrolledClass[] = [
+      {
+        ...cls,
+        id: cls.id + "-alt1",
+        startTime: "2:00 PM",
+        endTime: "5:00 PM",
+        room: cls.room.replace(/\d+/, "101"),
+        professor: "Prof. New Guy",
+        schedule: { ...cls.schedule, startHour: 14, endHour: 17, days: [1, 3] } // Tue, Thu
       },
+      {
+        ...cls,
+        id: cls.id + "-alt2",
+        startTime: "8:00 AM",
+        endTime: "11:00 AM",
+        room: cls.room.replace(/\d+/, "305"),
+        professor: "Prof. Morning Person",
+        schedule: { ...cls.schedule, startHour: 8, endHour: 11, days: [4] } // Fri
+      }
+    ];
+
+    setSwapData({
+      original: cls,
+      alternatives: mockAlternatives
     });
+  };
+
+  const confirmSwap = (newSection: EnrolledClass) => {
+    if (!swapData) return;
+
+    setEnrolledClasses(prev => prev.map(c => c.id === swapData.original.id ? { ...newSection, id: swapData.original.id } : c));
+    setSwapData(null);
+    showToast(`Swapped section for ${newSection.code}`);
   };
 
   return (
@@ -247,8 +356,8 @@ export default function ManageClassesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link href="#" className="block group">
                 <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                    ? 'bg-gray-800 border border-gray-700 hover:border-blue-500'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-gray-800 border border-gray-700 hover:border-blue-500'
+                  : 'bg-gray-100 hover:bg-gray-200'
                   }`}>
                   <div>
                     <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
@@ -264,8 +373,8 @@ export default function ManageClassesPage() {
 
               <Link href="#" className="block group">
                 <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                    ? 'bg-gray-800 border border-gray-700 hover:border-red-500'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-gray-800 border border-gray-700 hover:border-red-500'
+                  : 'bg-gray-100 hover:bg-gray-200'
                   }`}>
                   <div>
                     <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
@@ -283,6 +392,7 @@ export default function ManageClassesPage() {
             {/* Weekly Schedule */}
             <WeeklySchedule
               enrolledClasses={enrolledClasses}
+              onClassClick={setSelectedEnrolledClass}
               onSwapClass={handleSwapClass}
               onDropClass={handleDropClass}
             />
@@ -298,6 +408,84 @@ export default function ManageClassesPage() {
           </div>
         </div>
 
+        {/* Selected Class Details Modal */}
+        {selectedEnrolledClass && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSelectedEnrolledClass(null)} />
+            <div className={`relative w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
+                      {selectedEnrolledClass.code}
+                    </h3>
+                    <p className={`text-lg font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      {selectedEnrolledClass.name}
+                    </p>
+                  </div>
+                  <button onClick={() => setSelectedEnrolledClass(null)} className={`text-gray-400 hover:text-gray-600`}>×</button>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  <div className={`flex items-center gap-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                    <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
+                      <Clock size={16} />
+                    </div>
+                    <div>
+                      <p className={`text-xs font-semibold uppercase ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Time</p>
+                      <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                        {selectedEnrolledClass.startTime} - {selectedEnrolledClass.endTime}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={`flex items-center gap-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                    <div className="bg-emerald-100 text-emerald-600 p-2 rounded-full">
+                      <MapPin size={16} />
+                    </div>
+                    <div>
+                      <p className={`text-xs font-semibold uppercase ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Location</p>
+                      <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                        {selectedEnrolledClass.room}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={`flex items-center gap-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                    <div className="bg-purple-100 text-purple-600 p-2 rounded-full">
+                      <div className="w-4 h-4 rounded-full border-2 border-current" />
+                    </div>
+                    <div>
+                      <p className={`text-xs font-semibold uppercase ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Instructor</p>
+                      <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                        {selectedEnrolledClass.professor}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => handleSwapClass(selectedEnrolledClass)}
+                    className={`flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-colors
+                      ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-blue-900'}`}
+                  >
+                    <RefreshCw size={18} />
+                    Swap Class
+                  </button>
+                  <button
+                    onClick={() => handleDropClass(selectedEnrolledClass)}
+                    className="flex items-center justify-center gap-2 py-3 rounded-xl font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                    Drop Class
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Course Detail Modal */}
         <CourseDetailModal
           course={selectedCourse}
@@ -305,6 +493,17 @@ export default function ManageClassesPage() {
           onClose={() => setSelectedCourse(null)}
           onAdd={handleAddCourse}
         />
+
+        {/* Swap Modal */}
+        {swapData && (
+          <SwapModal
+            course={swapData.original}
+            alternatives={swapData.alternatives}
+            onSelect={confirmSwap}
+            onCancel={() => setSwapData(null)}
+            isDarkMode={isDarkMode}
+          />
+        )}
 
         {/* Confirmation Modal */}
         {confirmModal && (
