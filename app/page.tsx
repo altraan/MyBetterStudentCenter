@@ -3,6 +3,7 @@
 import { useLanguage } from "@/components/LanguageContext";
 import { useTheme } from "@/components/ThemeContext";
 import HackvilleLayout from "@/components/HackvilleLayout";
+import PrivacyToggle from "@/components/PrivacyToggle";
 import { mockUser, mockAcademicProgress, mockTodaysClasses, mockFinancialSummary, mockDashboardStats } from "@/lib/mock-data";
 import {
     Calendar,
@@ -61,7 +62,9 @@ export default function StudentPortal() {
                     <div className={`rounded-xl shadow-sm border p-6 flex flex-col justify-between hover:shadow-md transition-shadow ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>{t('currentGPA')}</h3>
                         <div className="flex items-center justify-center flex-1">
-                            <span className={`text-5xl font-black ${isDarkMode ? 'text-blue-400' : 'text-blue-900'}`}>{mockUser.gpa}</span>
+                            <PrivacyToggle storageKey="gpa" hiddenText="•.••" className={`text-5xl font-black ${isDarkMode ? 'text-blue-400' : 'text-blue-900'}`}>
+                                {mockUser.gpa}
+                            </PrivacyToggle>
                         </div>
                         <div className={`text-right text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>{t('lastUpdated')}: {mockDashboardStats.todayDate}</div>
                     </div>
@@ -111,7 +114,9 @@ export default function StudentPortal() {
                         <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>{t('accountBalance')}</h3>
                         <div className="flex flex-col items-center justify-center flex-1">
                             <span className={`text-sm mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t('totalOutstanding')}</span>
-                            <span className="text-4xl font-bold text-emerald-500">${mockFinancialSummary.totalDue.toFixed(2)}</span>
+                            <PrivacyToggle storageKey="balance" hiddenText="$••••.••" className="text-4xl font-bold text-emerald-500">
+                                ${mockFinancialSummary.totalDue.toFixed(2)}
+                            </PrivacyToggle>
                         </div>
                         <button className={`w-full py-2 rounded-lg font-medium transition-colors ${isDarkMode ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-blue-900 hover:bg-blue-800 text-white'}`}>
                             {t('makePayment')}

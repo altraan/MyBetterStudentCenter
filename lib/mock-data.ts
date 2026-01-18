@@ -1,6 +1,39 @@
 // Mock Data Store for Demo
 // This file contains all mock data for the student portal
 
+export interface Course {
+    id: string;
+    code: string;
+    name: string;
+    description: string;
+    professor: string;
+    credits: number;
+    type: 'core' | 'elective';
+    prerequisites: string[];
+    seats: { available: number; total: number };
+    schedule: {
+        days: number[]; // 0=Monday, 1=Tuesday, etc.
+        startHour: number;
+        endHour: number;
+        room: string;
+    };
+}
+
+export interface EnrolledClass {
+    id: string;
+    code: string;
+    name: string;
+    professor: string;
+    startTime: string;
+    endTime: string;
+    room: string;
+    schedule: {
+        days: number[];
+        startHour: number;
+        endHour: number;
+    };
+}
+
 export const mockUser = {
     id: "100293847",
     name: "Alex Student",
@@ -19,68 +52,215 @@ export const mockAcademicProgress = {
     totalYears: 4,
 };
 
-export const mockTodaysClasses = [
+// Currently enrolled classes for Winter 2026
+export const mockEnrolledClasses: EnrolledClass[] = [
     {
-        id: "1",
-        code: "DESN 2143",
-        name: "Class One",
-        professor: "Prof. John Doe",
+        id: "enrolled-1",
+        code: "DESN 4001",
+        name: "Capstone Project",
+        professor: "Prof. Sarah Chen",
         startTime: "9:00 AM",
         endTime: "12:00 PM",
         room: "Room J212",
+        schedule: { days: [0, 2], startHour: 9, endHour: 12 }, // Mon, Wed
     },
     {
-        id: "2",
-        code: "DESN 2314",
-        name: "Class Two",
-        professor: "Prof. John Doe",
-        startTime: "12:00 PM",
-        endTime: "1:00 PM",
-        room: "Room J222",
+        id: "enrolled-2",
+        code: "DESN 4002",
+        name: "Advanced Interaction",
+        professor: "Prof. Michael Lee",
+        startTime: "1:00 PM",
+        endTime: "3:00 PM",
+        room: "Room J220",
+        schedule: { days: [1, 3], startHour: 13, endHour: 15 }, // Tue, Thu
     },
     {
-        id: "3",
-        code: "VDES 2431",
-        name: "Class Three",
-        professor: "Prof. John Doe",
-        startTime: "2:00 PM",
-        endTime: "4:00 PM",
+        id: "enrolled-3",
+        code: "DESN 4003",
+        name: "Portfolio Development",
+        professor: "Prof. Emma Wilson",
+        startTime: "10:00 AM",
+        endTime: "12:00 PM",
         room: "Room J216",
+        schedule: { days: [4], startHour: 10, endHour: 12 }, // Fri
     },
 ];
 
-export const mockWeeklySchedule = [
+// Today's schedule (Saturday = no classes, but let's pretend it's Monday)
+export const mockTodaysClasses = mockEnrolledClasses.filter(c =>
+    c.schedule.days.includes(0) // Monday
+);
+
+// Available courses to add (for course browser)
+export const mockAvailableCourses: Course[] = [
+    // Core Courses
     {
-        id: "1",
-        code: "DESN 22848",
-        name: "Laboratory",
-        time: "8:00 AM-2:00 PM",
-        room: "Room: TRA-J220",
-        dayIndex: 4, // Friday (0=Monday)
-        startHour: 8,
-        durationHours: 6,
+        id: "avail-1",
+        code: "DESN 4004",
+        name: "Design Systems",
+        description: "Learn to create and maintain scalable design systems for enterprise applications. Covers component libraries, documentation, and cross-team collaboration.",
+        professor: "Prof. James Park",
+        credits: 3,
+        type: "core",
+        prerequisites: ["DESN 3001", "DESN 3002"],
+        seats: { available: 8, total: 25 },
+        schedule: { days: [0, 2], startHour: 14, endHour: 16, room: "Room J218" }, // Mon, Wed 2-4PM
     },
     {
-        id: "2",
-        code: "DESN 20102",
-        name: "Laboratory",
-        time: "12:00 PM-3:00 PM",
-        room: "Room: TRA-J220",
-        dayIndex: 1, // Tuesday
-        startHour: 12,
-        durationHours: 3,
+        id: "avail-2",
+        code: "DESN 4005",
+        name: "Design Leadership",
+        description: "Develop leadership skills for design teams. Topics include stakeholder management, design operations, and strategic planning.",
+        professor: "Prof. Maria Santos",
+        credits: 3,
+        type: "core",
+        prerequisites: ["DESN 3003"],
+        seats: { available: 12, total: 20 },
+        schedule: { days: [1, 3], startHour: 10, endHour: 12, room: "Room J222" }, // Tue, Thu 10AM-12PM
     },
     {
-        id: "3",
-        code: "DESN 10799",
-        name: "Lecture",
-        time: "1:00 PM-2:00 PM",
-        room: "Room: VTL-VTL",
-        dayIndex: 2, // Wednesday
-        startHour: 13,
-        durationHours: 1,
+        id: "avail-3",
+        code: "DESN 4006",
+        name: "Accessibility Design",
+        description: "Deep dive into accessible design principles, WCAG guidelines, and inclusive design practices.",
+        professor: "Prof. David Kim",
+        credits: 3,
+        type: "core",
+        prerequisites: ["DESN 2001"],
+        seats: { available: 5, total: 22 },
+        schedule: { days: [4], startHour: 13, endHour: 16, room: "Room J212" }, // Fri 1-4PM
+    },
+    {
+        id: "avail-4",
+        code: "DESN 4007",
+        name: "Motion Design",
+        description: "Learn animation principles for UI/UX. Create engaging micro-interactions and transitions using modern tools.",
+        professor: "Prof. Lisa Chen",
+        credits: 3,
+        type: "core",
+        prerequisites: ["DESN 2002"],
+        seats: { available: 0, total: 20 },
+        schedule: { days: [0, 2], startHour: 9, endHour: 11, room: "Room J214" }, // CONFLICT: Mon, Wed 9-11AM
+    },
+
+    // Elective Courses
+    {
+        id: "avail-5",
+        code: "BUSN 3001",
+        name: "Entrepreneurship",
+        description: "Launch your own design business. Learn about business models, funding, and startup operations.",
+        professor: "Prof. Robert Brown",
+        credits: 3,
+        type: "elective",
+        prerequisites: [],
+        seats: { available: 15, total: 30 },
+        schedule: { days: [1], startHour: 16, endHour: 19, room: "Room B102" }, // Tue 4-7PM
+    },
+    {
+        id: "avail-6",
+        code: "PSYC 2001",
+        name: "Cognitive Psychology",
+        description: "Understand how users think and process information. Essential for designing intuitive interfaces.",
+        professor: "Prof. Amanda White",
+        credits: 3,
+        type: "elective",
+        prerequisites: ["PSYC 1001"],
+        seats: { available: 20, total: 35 },
+        schedule: { days: [2, 4], startHour: 14, endHour: 16, room: "Room C210" }, // Wed, Fri 2-4PM
+    },
+    {
+        id: "avail-7",
+        code: "COMP 2501",
+        name: "Web Development II",
+        description: "Advanced web development with React, Next.js, and modern CSS frameworks.",
+        professor: "Prof. Kevin Zhang",
+        credits: 3,
+        type: "elective",
+        prerequisites: ["COMP 1501"],
+        seats: { available: 3, total: 25 },
+        schedule: { days: [0, 3], startHour: 15, endHour: 17, room: "Room D305" }, // Mon, Thu 3-5PM
+    },
+    {
+        id: "avail-8",
+        code: "ARTS 2001",
+        name: "Digital Illustration",
+        description: "Master digital illustration techniques using industry-standard tools like Procreate and Illustrator.",
+        professor: "Prof. Nina Rodriguez",
+        credits: 3,
+        type: "elective",
+        prerequisites: [],
+        seats: { available: 7, total: 18 },
+        schedule: { days: [1, 3], startHour: 13, endHour: 15, room: "Room A101" }, // CONFLICT: Tue, Thu 1-3PM
+    },
+    {
+        id: "avail-9",
+        code: "MKTG 2001",
+        name: "Digital Marketing",
+        description: "Learn SEO, social media marketing, and analytics for promoting design work.",
+        professor: "Prof. Chris Taylor",
+        credits: 3,
+        type: "elective",
+        prerequisites: [],
+        seats: { available: 22, total: 40 },
+        schedule: { days: [2], startHour: 9, endHour: 12, room: "Room B205" }, // Wed 9AM-12PM
+    },
+    {
+        id: "avail-10",
+        code: "FILM 1501",
+        name: "Video Production",
+        description: "Create compelling video content. Learn filming, editing, and post-production.",
+        professor: "Prof. Alex Turner",
+        credits: 3,
+        type: "elective",
+        prerequisites: [],
+        seats: { available: 10, total: 20 },
+        schedule: { days: [4], startHour: 9, endHour: 12, room: "Room M110" }, // Fri 9AM-12PM
     },
 ];
+
+// Helper function to check schedule conflicts
+export function hasScheduleConflict(course: Course, enrolledClasses: EnrolledClass[]): boolean {
+    for (const enrolled of enrolledClasses) {
+        // Check if any days overlap
+        const overlappingDays = course.schedule.days.filter(d => enrolled.schedule.days.includes(d));
+        if (overlappingDays.length > 0) {
+            // Check if times overlap
+            const courseStart = course.schedule.startHour;
+            const courseEnd = course.schedule.endHour;
+            const enrolledStart = enrolled.schedule.startHour;
+            const enrolledEnd = enrolled.schedule.endHour;
+
+            if (courseStart < enrolledEnd && courseEnd > enrolledStart) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Format schedule for display
+export function formatSchedule(schedule: { days: number[]; startHour: number; endHour: number; room: string }): string {
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+    const days = schedule.days.map(d => dayNames[d]).join(', ');
+    const formatHour = (h: number) => {
+        const period = h >= 12 ? 'PM' : 'AM';
+        const hour = h > 12 ? h - 12 : h;
+        return `${hour}:00 ${period}`;
+    };
+    return `${days} ${formatHour(schedule.startHour)} - ${formatHour(schedule.endHour)}`;
+}
+
+export const mockWeeklySchedule = mockEnrolledClasses.map((cls, idx) => ({
+    id: cls.id,
+    code: cls.code,
+    name: cls.name.split(' ').slice(0, 2).join(' '),
+    time: `${cls.startTime}-${cls.endTime}`,
+    room: cls.room,
+    dayIndex: cls.schedule.days[0],
+    startHour: cls.schedule.startHour,
+    durationHours: cls.schedule.endHour - cls.schedule.startHour,
+    color: ['bg-blue-200/60', 'bg-emerald-200/60', 'bg-purple-200/60'][idx % 3],
+}));
 
 export const mockFinancialSummary = {
     totalDue: 0.0,
@@ -103,14 +283,14 @@ export const mockReceipts = [
 ];
 
 export const mockCourseHistory = [
-    { id: "1", name: "Course One", term: "Fall 2024", grade: "A" },
-    { id: "2", name: "Course Two", term: "Fall 2024", grade: "A-" },
-    { id: "3", name: "Course Three", term: "Fall 2024", grade: "B+" },
-    { id: "4", name: "Course Four", term: "Fall 2024", grade: "A" },
-    { id: "5", name: "Course Five", term: "Winter 2025", grade: "B+" },
-    { id: "6", name: "Course Six", term: "Winter 2025", grade: "A-" },
-    { id: "7", name: "Course Seven", term: "Winter 2025", grade: "A" },
-    { id: "8", name: "Course Eight", term: "Winter 2025", grade: "B" },
+    { id: "1", name: "Design Fundamentals", term: "Fall 2024", grade: "A" },
+    { id: "2", name: "Digital Tools", term: "Fall 2024", grade: "A-" },
+    { id: "3", name: "Communications", term: "Fall 2024", grade: "B+" },
+    { id: "4", name: "Math for Design", term: "Fall 2024", grade: "A" },
+    { id: "5", name: "UX Design I", term: "Winter 2025", grade: "B+" },
+    { id: "6", name: "Visual Design", term: "Winter 2025", grade: "A-" },
+    { id: "7", name: "Prototyping", term: "Winter 2025", grade: "A" },
+    { id: "8", name: "Intro Psychology", term: "Winter 2025", grade: "B" },
 ];
 
 export const mockGradesByTerm = {
@@ -144,9 +324,11 @@ export const mockDashboardStats = {
     upcomingDeadlines: [
         { id: "1", title: "Capstone Milestone 2", dueDate: "Jan 25, 2026", course: "DESN 4001" },
         { id: "2", title: "Portfolio Draft", dueDate: "Jan 30, 2026", course: "DESN 4003" },
+        { id: "3", title: "Interaction Prototype", dueDate: "Feb 5, 2026", course: "DESN 4002" },
     ],
     announcements: [
         { id: "1", title: "Winter 2026 Fee Deadline", date: "Jan 20, 2026", priority: "high" },
         { id: "2", title: "Career Fair Registration Open", date: "Feb 1, 2026", priority: "medium" },
+        { id: "3", title: "Reading Week: Feb 17-21", date: "Feb 17, 2026", priority: "low" },
     ],
 };

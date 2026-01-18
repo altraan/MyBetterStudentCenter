@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 export async function POST(request: NextRequest) {
     try {
@@ -20,41 +21,33 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
         }
 
-        // Call ElevenLabs API
-        const voiceId = 'EXAVITQu4vr4xnSDxMaL'; // Sarah - friendly voice
-        const response = await fetch(
-            `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+        // Create ElevenLabs client
+        const elevenlabs = new ElevenLabsClient({
+            apiKey: apiKey,
+        });
+
+        // Convert text to speech using ElevenLabs SDK
+        const audio = await elevenlabs.textToSpeech.convert(
+            'JBFqnCBsd6RMkjVDRZzb', // George voice - clear and professional
             {
-                method: 'POST',
-                headers: {
-                    'Accept': 'audio/mpeg',
-                    'Content-Type': 'application/json',
-                    'xi-api-key': apiKey,
-                },
-                body: JSON.stringify({
-                    text: text,
-                    model_id: 'eleven_monolingual_v1',
-                    voice_settings: {
-                        stability: 0.5,
-                        similarity_boost: 0.5,
-                    },
-                }),
+                text: text,
+                modelId: 'eleven_multilingual_v2',
+                outputFormat: 'mp3_44100_128',
             }
         );
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('ElevenLabs API error:', errorText);
-            return NextResponse.json({ error: 'TTS API error' }, { status: response.status });
+        // Convert the readable stream to a buffer
+        const chunks: Uint8Array[] = [];
+        for await (const chunk of audio) {
+            chunks.push(chunk);
         }
+        const audioBuffer = Buffer.concat(chunks);
 
-        // Return audio as a stream
-        const audioBuffer = await response.arrayBuffer();
-
+        // Return audio as response
         return new NextResponse(audioBuffer, {
             headers: {
                 'Content-Type': 'audio/mpeg',
-                'Content-Length': String(audioBuffer.byteLength),
+                'Content-Length': String(audioBuffer.length),
             },
         });
     } catch (error) {
