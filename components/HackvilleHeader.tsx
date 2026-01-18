@@ -11,8 +11,10 @@ import {
     Sun,
     Type,
     Volume2,
-    Globe
+    Globe,
+    Accessibility
 } from "lucide-react";
+import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 import { useTheme } from "./ThemeContext";
 import { languages } from "@/lib/i18n";
@@ -158,24 +160,23 @@ export default function HackvilleHeader() {
 
                         <div className="py-2 space-y-1">
 
-                            {/* Comic Sans Toggle */}
+                            {/* Accessibility Link */}
                             <div className="px-5 py-2">
-                                <div className={`flex items-center justify-between p-2 rounded-xl border transition-all ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}>
+                                <Link
+                                    href="/accessibility"
+                                    onClick={() => setIsUserOpen(false)}
+                                    className={`flex items-center justify-between p-2 rounded-xl border transition-all hover:bg-opacity-80 ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}
+                                >
                                     <div className="flex items-center space-x-3">
-                                        <div className={`p-1.5 rounded-lg ${fontFamily === 'helvetica' ? 'bg-purple-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-400' : 'bg-white text-gray-500 shadow-sm')}`}>
-                                            <Type size={16} />
+                                        <div className={`p-1.5 rounded-lg ${isDarkMode ? 'bg-gray-700 text-gray-400' : 'bg-white text-gray-500 shadow-sm'}`}>
+                                            <Accessibility size={16} />
                                         </div>
                                         <span className={`text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                            Helvetica
+                                            {t('accessibility')}
                                         </span>
                                     </div>
-                                    <button
-                                        onClick={() => setFontFamily(fontFamily === 'helvetica' ? 'default' : 'helvetica')}
-                                        className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none ${fontFamily === 'helvetica' ? 'bg-purple-600' : 'bg-gray-300'}`}
-                                    >
-                                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 transform ${fontFamily === 'helvetica' ? 'translate-x-6' : 'translate-x-1'}`} />
-                                    </button>
-                                </div>
+                                    <ChevronDown size={14} className={`-rotate-90 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                                </Link>
                             </div>
 
                             {/* Dyslexia Mode (TTS) Toggle */}

@@ -351,51 +351,6 @@ export default function ManageClassesPage() {
                 )}
               </div>
             </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link href="#" className="block group">
-                <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                  ? 'bg-gray-800 border border-gray-700 hover:border-blue-500'
-                  : 'bg-gray-100 hover:bg-gray-200'
-                  }`}>
-                  <div>
-                    <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
-                      Swap Classes
-                    </span>
-                    <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Change section times
-                    </p>
-                  </div>
-                  <ChevronRight className={`group-hover:translate-x-1 transition-transform ${isDarkMode ? 'text-gray-500' : 'text-blue-900'}`} size={24} />
-                </div>
-              </Link>
-
-              <Link href="#" className="block group">
-                <div className={`rounded-xl p-6 flex items-center justify-between transition-all ${isDarkMode
-                  ? 'bg-gray-800 border border-gray-700 hover:border-red-500'
-                  : 'bg-gray-100 hover:bg-gray-200'
-                  }`}>
-                  <div>
-                    <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
-                      Drop Classes
-                    </span>
-                    <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Remove from schedule
-                    </p>
-                  </div>
-                  <ChevronRight className={`group-hover:translate-x-1 transition-transform ${isDarkMode ? 'text-gray-500' : 'text-blue-900'}`} size={24} />
-                </div>
-              </Link>
-            </div>
-
-            {/* Weekly Schedule */}
-            <WeeklySchedule
-              enrolledClasses={enrolledClasses}
-              onClassClick={setSelectedEnrolledClass}
-              onSwapClass={handleSwapClass}
-              onDropClass={handleDropClass}
-            />
           </div>
 
           {/* Right Column - Course Browser */}
@@ -407,6 +362,14 @@ export default function ManageClassesPage() {
             />
           </div>
         </div>
+
+        {/* Weekly Schedule */}
+        <WeeklySchedule
+          enrolledClasses={enrolledClasses}
+          onClassClick={setSelectedEnrolledClass}
+          onSwapClass={handleSwapClass}
+          onDropClass={handleDropClass}
+        />
 
         {/* Selected Class Details Modal */}
         {selectedEnrolledClass && (

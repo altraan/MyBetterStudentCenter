@@ -85,3 +85,64 @@
 .font-comic * {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
+
+@layer utilities {
+  .enhance-text {
+    font-size: 1.125rem;
+    /* 18px base */
+    line-height: 1.75;
+  }
+
+  .enhance-text h1 {
+    font-size: 2.5rem !important;
+  }
+
+  .enhance-text h2 {
+    font-size: 2rem !important;
+  }
+
+  .enhance-text h3 {
+    font-size: 1.75rem !important;
+  }
+
+  .enhance-text p,
+  .enhance-text span,
+  .enhance-text div {
+    font-size: 110%;
+  }
+
+  .high-contrast {
+    --background: 0 0% 100% !important;
+    --foreground: 0 0% 0% !important;
+    --primary: 0 0% 0% !important;
+    --primary-foreground: 0 0% 100% !important;
+    --card: 0 0% 100% !important;
+    --card-foreground: 0 0% 0% !important;
+    --border: 0 0% 0% !important;
+    /* Force high contrast borders */
+    border-color: black !important;
+  }
+
+  .dark .high-contrast {
+    --background: 0 0% 0% !important;
+    --foreground: 0 0% 100% !important;
+    --primary: 0 0% 100% !important;
+    --primary-foreground: 0 0% 0% !important;
+    --card: 0 0% 0% !important;
+    --card-foreground: 0 0% 100% !important;
+    --border: 0 0% 100% !important;
+    border-color: white !important;
+  }
+
+  .reduce-visuals img,
+  .reduce-visuals video,
+  /* Handle lucide icons carefully - maybe don't hide them as they are functional */
+  .reduce-visuals svg:not(.lucide) {
+    display: none !important;
+  }
+
+  .reduce-visuals * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

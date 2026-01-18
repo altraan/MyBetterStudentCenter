@@ -52,6 +52,7 @@ export const translations = {
     manageClasses: 'Manage Classes',
     finance: 'Finance',
     serviceRequests: 'Service Requests',
+    accessibility: 'Accessibility',
     registrationStatus: 'Registration Status',
     creditTransfer: 'Credit Transfers',
     sheridanAlert: 'Sheridan Alert',

@@ -16,6 +16,7 @@ import {
     FileText,
     Headphones,
     HelpCircle,
+    Accessibility,
 
     Menu,
     ChevronLeft

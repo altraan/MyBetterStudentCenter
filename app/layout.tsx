@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { ThemeProvider } from "@/components/ThemeContext";
+import { AccessibilityProvider } from "@/components/AccessibilityContext";
 import TTSButton from "@/components/TTSButton";
 
 const geistSans = Geist({
@@ -30,8 +31,10 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased text-foreground bg-background`}>
         <ThemeProvider>
           <LanguageProvider>
-            {children}
-            <TTSButton />
+            <AccessibilityProvider>
+              {children}
+              <TTSButton />
+            </AccessibilityProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
