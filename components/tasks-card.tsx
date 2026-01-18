@@ -41,7 +41,9 @@ export function TasksCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Pending Tasks</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+        <Button variant="ghost"
+          size="sm"
+          className="text-[#0B335E] hover:bg-[#0B335E] hover:text-white transition-colors">
           View All
           <ArrowRight className="h-4 w-4 ml-1" />
         </Button>
@@ -61,8 +63,8 @@ export function TasksCard() {
               ) : (
                 <Circle className={cn(
                   "h-5 w-5 flex-shrink-0 mt-0.5",
-                  task.priority === "high" ? "text-red-500" : 
-                  task.priority === "medium" ? "text-amber-500" : "text-muted-foreground"
+                  task.priority === "high" ? "text-red-500" :
+                    task.priority === "medium" ? "text-amber-500" : "text-muted-foreground"
                 )} />
               )}
               <div className="flex-1 min-w-0">

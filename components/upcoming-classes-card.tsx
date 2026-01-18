@@ -10,27 +10,21 @@ const classes = [
     name: "Data Structures & Algorithms",
     time: "9:00 AM - 10:30 AM",
     location: "Room B204",
-    instructor: "Dr. Smith",
-    status: "In Progress",
-    statusColor: "bg-emerald-500",
+    instructor: "Dr. Smith"
   },
   {
     code: "MATH 1051",
     name: "Calculus II",
     time: "11:00 AM - 12:30 PM",
     location: "Room A115",
-    instructor: "Prof. Johnson",
-    status: "Upcoming",
-    statusColor: "bg-[#0B335E]",
+    instructor: "Prof. Johnson"
   },
   {
     code: "COMM 1100",
     name: "Professional Communication",
     time: "2:00 PM - 3:30 PM",
     location: "Room C302",
-    instructor: "Ms. Davis",
-    status: "Later Today",
-    statusColor: "bg-muted-foreground",
+    instructor: "Ms. Davis"
   },
 ]
 
@@ -39,7 +33,9 @@ export function UpcomingClassesCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Today&apos;s Schedule</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+        <Button variant="ghost"
+          size="sm"
+          className="text-[#0B335E] hover:bg-[#0B335E] hover:text-white transition-colors">
           Full Schedule
           <ArrowRight className="h-4 w-4 ml-1" />
         </Button>

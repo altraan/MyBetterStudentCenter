@@ -10,7 +10,9 @@ export function FinancialOverviewCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Financial Overview</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+        <Button variant="ghost"
+          size="sm"
+          className="text-[#0B335E] hover:bg-[#0B335E] hover:text-white transition-colors">
           View All
           <ArrowRight className="h-4 w-4 ml-1" />
         </Button>

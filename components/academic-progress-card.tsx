@@ -12,7 +12,9 @@ export function AcademicProgressCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Academic Progress</CardTitle>
-        <Button variant="ghost" size="sm" className="text-[#0B335E] hover:text-[#013767]">
+        <Button variant="ghost"
+          size="sm"
+          className="text-[#0B335E] hover:bg-[#0B335E] hover:text-white transition-colors">
           View Details
           <ArrowRight className="h-4 w-4 ml-1" />
         </Button>
@@ -78,7 +80,7 @@ export function AcademicProgressCard() {
                 <span className="text-sm text-muted-foreground">12/18 credits</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: "67%" }} />
+                <div className="h-full bg-[#013767] rounded-full" style={{ width: "67%" }} />
               </div>
             </div>
           </div>

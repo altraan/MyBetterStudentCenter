@@ -16,7 +16,7 @@ const stats = [
     value: "3.7",
     icon: CheckCircle2,
     description: "Cumulative",
-    color: "bg-emerald-500",
+    color: "bg-[#013767]",
   },
   {
     label: "Credits Completed",
@@ -30,7 +30,7 @@ const stats = [
     value: "$1,250",
     icon: DollarSign,
     description: "Payment due Feb 15",
-    color: "bg-amber-500",
+    color: "bg-[#013767]",
   },
 ]
 
