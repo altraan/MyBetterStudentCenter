@@ -38,6 +38,14 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-blue-800">Self-Service</h2>
               <p className="text-gray-600">Profile, Holds, Contact Info</p>
             </Link>
+
+            <Link href="/ai-chat" className="block p-6 bg-blue-50 shadow rounded-lg hover:shadow-md transition border-l-4 border-blue-900">
+              <h2 className="text-2xl font-bold text-blue-900 flex items-center gap-2">
+                Sheridan AI
+                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full uppercase tracking-wider">New</span>
+              </h2>
+              <p className="text-gray-600">Get instant help with your academic and campus questions.</p>
+            </Link>
           </>
         ) : (
           <>
