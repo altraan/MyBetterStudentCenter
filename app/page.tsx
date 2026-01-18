@@ -147,15 +147,22 @@ export default function StudentPortal() {
                         <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>{t('importantLinks')}</h3>
                         <ul className="space-y-3">
                             {[
-                                { label: t('bookstore'), href: "#" },
-                                { label: t('libraryResources'), href: "#" },
-                                { label: t('itSupport'), href: "#" },
-                                { label: t('campusMap'), href: "#" }
+                                { label: t('bookstore'), href: "https://www.sheridancollege.ca/student-life/campus-services/campus-store" },
+                                { label: t('libraryResources'), href: "https://www.sheridancollege.ca/student-life/student-services/library-services" },
+                                { label: t('itSupport'), href: "https://sheridancollege.service-now.com" },
+                                { label: t('campusMap'), href: "https://www.sheridancollege.ca/-/media/project/sheridan/shared/files/about/campus-locations/campus-map-trafalgar.pdf" }
                             ].map((link, i) => (
                                 <li key={i}>
-                                    <a href={link.href} className={`flex items-center justify-between text-sm group transition-colors ${isDarkMode ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`}>
+                                    <a href={link.href}
+                                        target="_blank"             // Opens in new tab
+                                        rel="noopener noreferrer"   // Security best practice
+                                        className="flex items-center justify-between text-sm text-gray-700 
+                                        hover:text-blue-700 hover:bg-blue-50 
+                                        px-3 py-2 rounded-lg group transition-all duration-200">
                                         <span>{link.label}</span>
-                                        <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <ExternalLink
+                                            size={14}
+                                            className="opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-200" />
                                     </a>
                                 </li>
                             ))}
