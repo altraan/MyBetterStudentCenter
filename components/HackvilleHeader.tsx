@@ -10,7 +10,8 @@ import {
     Moon,
     Sun,
     Type,
-    Volume2
+    Volume2,
+    Globe
 } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import { useTheme } from "./ThemeContext";
@@ -74,13 +75,22 @@ export default function HackvilleHeader() {
 
             {/* Actions */}
             <div className="flex items-center space-x-4 h-full">
+                {/* Theme Toggle */}
+                <button
+                    onClick={toggleDarkMode}
+                    className={`p-2 rounded-full transition-colors focus:outline-none ${isDarkMode ? 'text-blue-400 hover:bg-gray-800' : 'text-orange-500 hover:bg-gray-100'}`}
+                    title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                    {isDarkMode ? <Moon size={24} /> : <Sun size={24} />}
+                </button>
+
                 {/* Burger Menu */}
                 <div className="relative group h-full flex items-center" ref={burgerDropdownRef}>
                     <button
                         onClick={toggleBurger}
                         className={`p-2 rounded-full transition-colors focus:outline-none ${isBurgerOpen ? (isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-blue-900') : (isDarkMode ? 'text-gray-400 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-100')}`}
                     >
-                        <Menu size={28} />
+                        <Globe size={28} />
                     </button>
 
                     {/* Burger Dropdown Menu */}
@@ -147,25 +157,6 @@ export default function HackvilleHeader() {
                         </div>
 
                         <div className="py-2 space-y-1">
-                            {/* Theme Toggle Switch */}
-                            <div className="px-5 py-2">
-                                <div className={`flex items-center justify-between p-2 rounded-xl border transition-all ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}>
-                                    <div className="flex items-center space-x-3">
-                                        <div className={`p-1.5 rounded-lg ${isDarkMode ? 'bg-gray-700 text-blue-400' : 'bg-white text-orange-500 shadow-sm'}`}>
-                                            {isDarkMode ? <Moon size={16} /> : <Sun size={16} />}
-                                        </div>
-                                        <span className={`text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                            {isDarkMode ? t('darkMode') : t('lightMode')}
-                                        </span>
-                                    </div>
-                                    <button
-                                        onClick={toggleDarkMode}
-                                        className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none ${isDarkMode ? 'bg-blue-600' : 'bg-gray-300'}`}
-                                    >
-                                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 transform ${isDarkMode ? 'translate-x-6' : 'translate-x-1'}`} />
-                                    </button>
-                                </div>
-                            </div>
 
                             {/* Comic Sans Toggle */}
                             <div className="px-5 py-2">

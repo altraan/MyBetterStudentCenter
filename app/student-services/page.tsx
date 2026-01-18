@@ -5,7 +5,7 @@ import { useLanguage } from "@/components/LanguageContext";
 
 export default function StudentServicesPage() {
   const { t } = useLanguage();
-  
+
   return (
     <HackvilleLayout>
       <div className="max-w-7xl mx-auto">
@@ -15,7 +15,7 @@ export default function StudentServicesPage() {
           </h1>
         </header>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p className="text-gray-600">Access various student support services, including career advice, counseling, and health services.</p>
+          <p className="text-gray-600">{t('studentServicesDescription')}</p>
         </div>
       </div>
     </HackvilleLayout>

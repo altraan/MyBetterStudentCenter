@@ -139,7 +139,7 @@ export default function HackvilleAIChat() {
                                 max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm
                                 ${msg.role === 'user'
                                     ? 'bg-blue-900 text-white rounded-br-none'
-                                    : (isDarkMode ? 'bg-gray-700 text-gray-100 border-gray-600' : 'bg-white text-gray-800 border-blue-50') + ' border rounded-bl-none'}
+                                    : (isDarkMode ? 'bg-gray-700 text-gray-100 border-gray-600' : 'bg-white text-gray-800 border-blue-50') + ' border rounded-bl-none'} whitespace-pre-wrap
                             `}>
                                 {msg.content}
                             </div>

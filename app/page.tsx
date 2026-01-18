@@ -99,11 +99,11 @@ export default function StudentPortal() {
                             <div className="space-y-2 mt-4 md:mt-0">
                                 <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-300' : ''}`}>
                                     <div className={`w-3 h-3 rounded-full me-2 ${isDarkMode ? 'bg-blue-500' : 'bg-blue-900'}`}></div>
-                                    <span>{t('completedCredits')}: {mockAcademicProgress.completedCredits} Credits</span>
+                                    <span>{t('completedCredits')}: {mockAcademicProgress.completedCredits} {t('credits')}</span>
                                 </div>
                                 <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-300' : ''}`}>
                                     <div className={`w-3 h-3 rounded-full me-2 ${isDarkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
-                                    <span>{t('remainingCredits')}: {(mockAcademicProgress.totalCredits - mockAcademicProgress.completedCredits).toFixed(1)} Credits</span>
+                                    <span>{t('remainingCredits')}: {(mockAcademicProgress.totalCredits - mockAcademicProgress.completedCredits).toFixed(1)} {t('credits')}</span>
                                 </div>
                             </div>
                         </div>

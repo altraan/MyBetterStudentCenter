@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
         // Convert the readable stream to a buffer
         const chunks: Uint8Array[] = [];
-        for await (const chunk of audio) {
+        for await (const chunk of audio as any) {
             chunks.push(chunk);
         }
         const audioBuffer = Buffer.concat(chunks);

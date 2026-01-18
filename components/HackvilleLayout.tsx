@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import HackvilleHeader from "@/components/HackvilleHeader";
 import { useLanguage } from "@/components/LanguageContext";
@@ -16,7 +16,7 @@ import {
     FileText,
     Headphones,
     HelpCircle,
-    ArrowLeft,
+
     Menu,
     ChevronLeft
 } from "lucide-react";
@@ -31,52 +31,52 @@ export default function HackvilleLayout({ children }: HackvilleLayoutProps) {
     const { isDarkMode } = useTheme();
     const [isExpanded, setIsExpanded] = useState(true);
     const pathname = usePathname();
-    const router = useRouter();
+
 
     const navItems = [
         {
             icon: Home,
-            label: "Dashboard",
+            label: "dashboard",
             href: "/"
         },
         {
             icon: BookOpen,
-            label: "Academic Records",
+            label: "academicRecords",
             href: "/academic-records"
         },
         {
             icon: TrendingUp,
-            label: "Academic Progress",
+            label: "academicProgress",
             href: "/academic-progress"
         },
         {
             icon: Calendar,
-            label: "Manage Classes",
+            label: "manageClasses",
             href: "/manage-classes"
         },
         {
             icon: DollarSign,
-            label: "Finances",
+            label: "finances",
             href: "/financial"
         },
         {
             icon: GraduationCap,
-            label: "Credit Transfers",
+            label: "creditTransfer",
             href: "/credit-transfers"
         },
         {
             icon: FileText,
-            label: "Registration Status",
+            label: "registrationStatus",
             href: "/registration-status"
         },
         {
             icon: Headphones,
-            label: "Student Services",
+            label: "studentServices",
             href: "/student-services"
         },
         {
             icon: HelpCircle,
-            label: "Service Requests",
+            label: "serviceRequests",
             href: "/service-requests"
         },
     ];
@@ -91,25 +91,16 @@ export default function HackvilleLayout({ children }: HackvilleLayoutProps) {
                     ${isExpanded ? 'w-64' : 'w-20'} 
                     ${isDarkMode ? 'bg-gray-900' : 'bg-blue-900'} text-white flex flex-col fixed h-full z-40 shadow-xl transition-all duration-300 ease-in-out
                 `}>
-                    {/* Back Button and Toggle */}
-                    <div className={`p-4 border-b ${isDarkMode ? 'border-gray-800' : 'border-blue-800'} flex items-center justify-between`}>
+                    {/* Toggle Button */}
+                    <div className={`p-4 border-b ${isDarkMode ? 'border-gray-800' : 'border-blue-800'} flex items-center justify-end`}>
                         {isExpanded ? (
-                            <>
-                                <button
-                                    onClick={() => router.back()}
-                                    className="flex items-center text-white hover:text-blue-200 transition-colors"
-                                >
-                                    <ArrowLeft size={20} className="me-2" />
-                                    <span className="font-medium">Back</span>
-                                </button>
-                                <button
-                                    onClick={() => setIsExpanded(false)}
-                                    className={`p-1 ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-blue-800'} rounded-md transition-colors`}
-                                    title="Collapse menu"
-                                >
-                                    <ChevronLeft size={20} />
-                                </button>
-                            </>
+                            <button
+                                onClick={() => setIsExpanded(false)}
+                                className={`p-1 ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-blue-800'} rounded-md transition-colors`}
+                                title="Collapse menu"
+                            >
+                                <ChevronLeft size={20} />
+                            </button>
                         ) : (
                             <button
                                 onClick={() => setIsExpanded(true)}
@@ -140,7 +131,7 @@ export default function HackvilleLayout({ children }: HackvilleLayoutProps) {
                                     title={!isExpanded ? item.label : undefined}
                                 >
                                     <IconComponent size={20} className={isExpanded ? 'me-4' : ''} />
-                                    {isExpanded && <span className="font-medium whitespace-nowrap">{item.label}</span>}
+                                    {isExpanded && <span className="font-medium whitespace-nowrap">{t(item.label as any) || item.label}</span>}
                                 </Link>
                             );
                         })}

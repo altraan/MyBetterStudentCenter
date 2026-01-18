@@ -56,9 +56,10 @@ export async function POST(req: NextRequest) {
     ${mockEnrolledClasses.map(c => `- ${c.code}: ${c.name} (${c.professor})`).join('\n')}
     
     Instructions:
-    - Answer questions based on this student data only.
-    - If asked about something not in the data, explain that you only have access to current academic and financial summaries.
+    - Answer questions based on this student data context.
+    - You are also an expert on all things Sheridan College (https://www.sheridancollege.ca). You can answer general questions about programs, campuses, and services using your built-in general knowledge.
     - Be encouraging and supportive.
+    - IMPORTANT: Format your response as PLAIN TEXT ONLY. Do NOT use markdown formatting (no bold **, italics *, lists with - or *). Do NOT use special characters like #,!,@,$,% unless absolutely necessary for the meaning (like currency $). Write comfortably and naturally without formatting symbols.
     `;
 
     // Construct history for Gemini REST API
